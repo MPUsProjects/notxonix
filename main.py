@@ -1,5 +1,7 @@
 import pygame as pg
 from assets.gamelib.const import *
+from assets.gamelib.scripts import *
+from assets.gamelib.objects import *
 
 
 def main_screen():
@@ -7,7 +9,8 @@ def main_screen():
 
     # прочая настройка для экрана
     bg_coord = 0
-    bg = pg.image.load('assets/textures/background_menu_movable.jpg')
+    # bg = pg.image.load('assets/textures/background_menu_movable.jpg')
+    bg = pg.image.load('assets/textures/background/loading_screen1.png')
 
     while running and scrnow == MAINSCR:
         scr.fill('black')
@@ -15,13 +18,17 @@ def main_screen():
 
         # апдейты
         scr.blit(bg, (bg_coord, 0))
+        """
         scr.blit(bg, (bg_coord + 503, 0))
         scr.blit(bg, (bg_coord + 1006, 0))
+        """
 
         # рабочий блок
-        bg_coord -= int(time * 1)
+        """
+        bg_coord -= time * 0.0125
         if bg_coord <= -503:
             bg_coord = 0
+        """
 
         # технический блок
         pg.display.update()
