@@ -30,10 +30,15 @@ class Cell:
 
 
 class Board:
-    def __init__(self, size: tuple[int, int], cellsize: int):
+    def __init__(self, origin: tuple[int, int], size: tuple[int, int], cellsize: int, field_texture: pg.Surface,
+                 trail_texture: pg.Surface, void_texture: pg.Surface):
+        self.field_texture = field_texture
+        self.trail_texture = trail_texture
+        self.void_texture = void_texture
         self.cellsize = cellsize
         self.bsize = size
         self.board = list(map(lambda x: list(map(lambda y: Cell(self, (x, y)), range(size[1]))), range(size[0])))
+        self.origin = origin
 
     def read_file(self, file):
         with open(file) as f:
@@ -47,15 +52,26 @@ class Board:
         if cellcode == assets.gamelib.const.__CELLFIELD:
             return Cell(self, coords, CELLFIELD)
 
-    def draw(self, scr: pg.Surface, field_texture: pg.Surface, trail_texture: pg.Surface, void_texture: pg.Surface):
+    def draw(self, scr: pg.Surface):
         for i in range(self.bsize[1]):
             for j in range(self.bsize[0]):
                 if self.board[j][i].get_cell_state() == CELLFIELD:
-                    scr.blit(field_texture, (self.cellsize * i, self.cellsize * j))
+                    scr.blit(self.field_texture, (self.origin[0] + self.cellsize * i,
+                                                  self.origin[1] + self.cellsize * j))
                 elif self.board[j][i].get_cell_state() == CELLTRAIL:
-                    scr.blit(trail_texture, (self.cellsize * i, self.cellsize * j))
+                    scr.blit(self.trail_texture, (self.origin[0] + self.cellsize * i,
+                                                  self.origin[1] + self.cellsize * j))
                 elif self.board[j][i].get_cell_state() == CELLVOID:
-                    scr.blit(void_texture, (self.cellsize * i, self.cellsize * j))
+                    scr.blit(self.void_texture, (self.origin[0] + self.cellsize * i,
+                                                 self.origin[1] + self.cellsize * j))
+
+    def on_board_coords(self, coords: tuple[int, int]):
+        '''Возвращает координаты точки относительно клеток поля Board в виде (№строки, №столбца)'''
+        if (self.origin[0] <= coords[0] < self.origin[0] + self.cellsize * self.bsize[1] and
+                self.origin[0] <= coords[1] < self.origin[1] + self.cellsize * self.bsize[0]):
+            return ((coords[1] - self.origin[1]) // self.cellsize, (coords[0] - self.origin[0]) // self.cellsize)
+        return None
+
 
 class Button(pg.sprite.Sprite):
     def __init__(self, text: str, center: tuple[int, int], size: tuple[int, int], *group):
