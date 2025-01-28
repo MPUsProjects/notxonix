@@ -16,19 +16,15 @@ def main_screen():
         scr.fill('black')
         time = clock.tick()
 
+        if time >= 45:
+            bg = pg.image.load('assets/textures/background/menunegotovo.png')
         # апдейты
         scr.blit(bg, (bg_coord, 0))
-        """
         scr.blit(bg, (bg_coord + 503, 0))
         scr.blit(bg, (bg_coord + 1006, 0))
-        """
-
-        # рабочий блок
-        """
-        bg_coord -= time * 0.0125
+        bg_coord -= time * 0.02
         if bg_coord <= -503:
             bg_coord = 0
-        """
 
         # технический блок
         pg.display.update()
@@ -43,6 +39,10 @@ def game_screen():
     pass
 
 
+def shop():
+    pass
+
+
 # инициализация
 pg.init()
 scr = pg.display.set_mode((640, 360))
@@ -50,7 +50,7 @@ pg.display.set_caption(f'{APPNAME} {APPVER}')
 # pg.display.set_icon('')
 running = True
 scrnow = MAINSCR
-ball1 = pg.image.load('assets/textures/ball1.png')
+ball1 = pg.image.load('assets/textures/player/ball1.png')
 
 # настройка
 clock = pg.time.Clock()

@@ -1,6 +1,6 @@
 # базовые
 APPNAME = 'Notxonix'
-APPVER = 'indev-20250111'
+APPVER = 'indev-20250128'
 
 # технические
 MAINSCR = 1
