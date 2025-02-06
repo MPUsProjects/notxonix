@@ -5,6 +5,7 @@ APPVER = 'indev-20250128'
 # технические
 MAINSCR = 1
 GAMESCR = 2
+SHOPSCR = 3
 
 # cellcodes
 __CELLPLAYER = '@'
