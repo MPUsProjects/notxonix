@@ -1,5 +1,8 @@
 import pygame as pg
+import firebase_admin as fba
+from firebase_admin import db
 import assets.gamelib.const
+
 
 
 CELLVOID = 1  # поле шарика
@@ -107,3 +110,24 @@ class Button(pg.sprite.Sprite):
         x, y = self.center
         x1, y1 = coords
         return True if x - w / 2 <= x1 <= x + w / 2 and y - h / 2 <= y1 <= y + h / 2 else False
+
+
+# Исполнительные классы
+class CloudDB:
+    def __init__(self):
+        cred = fba.credentials.Certificate(assets.gamelib.const.DBCERT)
+        self.default_app = fba.initialize_app(cred, {
+            "databaseURL": assets.gamelib.const.DBURL
+        })
+
+    def get_rtdb(self, key):
+        return db.reference(f'/{key}/').get()
+
+    def write_rtdb(self, key, value):
+        db.reference(f'/{key}/').set(value)
+
+    def get_storage(self, name):
+        pass
+
+    def write_storage(self, name):
+        pass

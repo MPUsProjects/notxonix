@@ -5,21 +5,24 @@ import os
 PATH = 'assets/textures/'
 
 
-def load_textures(type: str):
+def load_textures(type: str, scale: int = -1):
     textures = {}
     path = PATH + f'{type}/'
     for file in os.listdir(path):
         if os.path.isfile(path + file) and file.endswith('.png'):
-            textures[f'{file[:-4]}'] = pg.image.load(path + file)
+            img = pg.image.load(path + file)
+            if scale > 0:
+                img = pg.transform.scale(img, (scale, scale))
+            textures[f'{file[:-4]}'] = img
     return textures
 
 
 def load_field_textures():
-    return load_textures('field')
+    return load_textures('field', 45)
 
 
 def load_wall_textures():
-    return load_textures('wall')
+    return load_textures('wall', 45)
 
 
 def load_ball_textures():
