@@ -24,8 +24,8 @@ while True:
 
     # Отображение фона
     scr.fill((255, 255, 255))  # Белый фон
-    bg = pg.image.load('background_menu_movable.jpg')
-    bg = pg.transform.rotozoom(bg, 0, 1.3)
+    bg = pg.image.load('back.png')
+    bg = pg.transform.rotozoom(bg, 0, 1.4)
 
     # Отображение текущего скина
     current_skin = skins[current_skin_index]
