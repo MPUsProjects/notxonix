@@ -10,13 +10,7 @@ running = True
 menu = True
 
 pg.display.set_caption(f'{APPNAME} {APPVER}')
-scale_factor = 2
 
-# Список скинов
-skinns = ['ball1.png', 'ball2.png', 'ballpepsi.png']
-skins = [pg.transform.scale(pg.image.load(skin_file), (int(100 * scale_factor), int(100 * scale_factor)))
-         for skin_file in skinns]
-current_skin_index = 0
 
 # Главный игровой цикл
 while True:
@@ -24,11 +18,9 @@ while True:
         if event.type == pg.QUIT:
             pg.quit()
             sys.exit()
-        elif event.type == pg.KEYUP:
+        if event.type == pg.KEYUP:
             if event.key == pg.K_RIGHT:
                 current_skin_index = (current_skin_index + 1) % len(skins)  # Переключение на следующий скин
-            elif event.type == pg.K_RIGHT:
-                current_skin_index = (current_skin_index - 1 + len(skins)) % len(skins)  # Переключение на предыдущий скин
 
     # Отображение фона
     scr.fill((255, 255, 255))  # Белый фон
@@ -38,7 +30,7 @@ while True:
     # Отображение текущего скина
     current_skin = skins[current_skin_index]
     scr.blit(bg, (0, 0))
-    scr.blit(current_skin, (640 // 2 - current_skin.get_width() // 2, 360 // 2 - current_skin.get_height() // 2))
+    scr.blit(current_skin, (190, 50))
 
     # Обновление дисплея
     pg.display.flip()

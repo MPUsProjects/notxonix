@@ -75,7 +75,7 @@ def shop_screen():
 pg.init()
 scr = pg.display.set_mode((640, 360))
 pg.display.set_caption(f'{APPNAME} {APPVER}')
-pg.display.set_icon(pg.image.load('pepse loga.png'))
+pg.display.set_icon(pg.image.load('assets/textures/player/ballpepsi.png'))
 running = True
 scrnow = MAINSCR
 ball1 = pg.image.load('assets/textures/player/ball1.png')
