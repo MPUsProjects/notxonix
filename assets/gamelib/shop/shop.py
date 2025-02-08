@@ -1,5 +1,6 @@
 import pygame as pg
 import sys
+from assets.gamelib.const import *
 
 # setup
 pg.init()
@@ -8,11 +9,11 @@ clock = pg.time.Clock()
 running = True
 menu = True
 
+pg.display.set_caption(f'{APPNAME} {APPVER}')
 scale_factor = 2
 
 # Список скинов
 skinns = ['ball1.png', 'ball2.png', 'ballpepsi.png']
-print(skinns)
 skins = [pg.transform.scale(pg.image.load(skin_file), (int(100 * scale_factor), int(100 * scale_factor)))
          for skin_file in skinns]
 current_skin_index = 0
@@ -23,18 +24,16 @@ while True:
         if event.type == pg.QUIT:
             pg.quit()
             sys.exit()
-
-    keys = pg.key.get_pressed()
-
-    # Изменение скина с помощью стрелок
-    if keys[pg.K_RIGHT]:
-        current_skin_index = (current_skin_index + 1) % len(skins)  # Переключение на следующий скин
-    elif keys[pg.K_LEFT]:
-        current_skin_index = (current_skin_index - 1 + len(skins)) % len(skins)  # Переключение на предыдущий скин
+        elif event.type == pg.KEYUP:
+            if event.key == pg.K_RIGHT:
+                current_skin_index = (current_skin_index + 1) % len(skins)  # Переключение на следующий скин
+            elif event.type == pg.K_RIGHT:
+                current_skin_index = (current_skin_index - 1 + len(skins)) % len(skins)  # Переключение на предыдущий скин
 
     # Отображение фона
     scr.fill((255, 255, 255))  # Белый фон
     bg = pg.image.load('background_menu_movable.jpg')
+    bg = pg.transform.rotozoom(bg, 0, 1.3)
 
     # Отображение текущего скина
     current_skin = skins[current_skin_index]
