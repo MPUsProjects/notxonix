@@ -52,6 +52,9 @@ class Board:
         if cellcode == assets.gamelib.const.__CELLFIELD:
             return Cell(self, coords, CELLFIELD)
 
+    def __set_standart_board(self):
+        pass
+
     def draw(self, scr: pg.Surface):
         for i in range(self.bsize[1]):
             for j in range(self.bsize[0]):
@@ -73,6 +76,15 @@ class Board:
         return None
 
 
+class Player:
+    def __init__(self, board):
+        self.board = board
+
+    def move(self, key_pressed):
+        pass
+
+
+# "Визуальные" классы
 class Button(pg.sprite.Sprite):
     def __init__(self, text: str, center: tuple[int, int], size: tuple[int, int], *group):
         super().__init__(*group)
