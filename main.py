@@ -2,6 +2,7 @@ import pygame as pg
 from assets.gamelib.const import *
 from assets.gamelib.scripts import *
 from assets.gamelib.objects import *
+import sys
 
 
 FIELDTEXTURES = {}
@@ -10,6 +11,7 @@ BALLTEXTURES = {}
 PLAYERTEXTURES = {}
 BGTEXTURES = {}
 DECOTEXTURES = {}
+
 
 
 def loading_screen():
@@ -61,6 +63,9 @@ def main_screen():
                 pg.quit()
                 running = False
                 break
+            if event.type == pg.KEYUP:
+                if event.key == pg.K_s:
+                    scrnow = SHOPSCR
 
 
 def game_screen():
@@ -68,7 +73,46 @@ def game_screen():
 
 
 def shop_screen():
-    pass
+    global clock, scr, running, scrnow
+    pg.init()
+    clock = pg.time.Clock()
+
+    pg.display.set_caption(f'{APPNAME} {APPVER}')
+
+    skinns = ['main_hero.png', 'loki.png', 'warrior.png']
+    skins = [pg.transform.scale(pg.image.load(f'assets/textures/player/{skin_file}'), (int(100 * 3), int(100 * 3)))
+             for skin_file in skinns]
+    current_skin_index = 0
+
+    # Главный игровой цикл
+    while running and scrnow == SHOPSCR:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+            if event.type == pg.KEYUP:
+                if event.key == pg.K_RIGHT:
+                    current_skin_index = (current_skin_index + 1) % len(skins)  # Переключение на следующий скин
+                elif event.key == pg.K_LEFT:
+                    current_skin_index = (current_skin_index - 1) % len(skins)  # Переключение на следующий скин
+                elif event.key == pg.K_ESCAPE:
+                    scrnow = MAINSCR
+
+        # Отображение фона
+        scr.fill((255, 255, 255))  # Белый фон
+        bg = pg.image.load('assets/textures/background/back.png')
+        bg = pg.transform.rotozoom(bg, 0, 1.4)
+
+        # Отображение текущего скина
+        current_skin = skins[current_skin_index]
+        scr.blit(bg, (0, 0))
+        scr.blit(current_skin, (190, 50))
+
+        # Обновление дисплея
+        pg.display.flip()
+
+        # Ограничение FPS
+        pg.time.Clock().tick(30)
 
 
 # инициализация

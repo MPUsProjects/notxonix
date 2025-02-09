@@ -11,7 +11,7 @@ menu = True
 
 pg.display.set_caption(f'{APPNAME} {APPVER}')
 
-skinns = ['loki.png', 'main_hero.png', 'warrior.png']
+skinns = ['main_hero.png', 'loki.png', 'warrior.png']
 skins = [pg.transform.scale(pg.image.load(skin_file), (int(100 * 3), int(100 * 3)))
          for skin_file in skinns]
 current_skin_index = 0
@@ -25,6 +25,10 @@ while True:
         if event.type == pg.KEYUP:
             if event.key == pg.K_RIGHT:
                 current_skin_index = (current_skin_index + 1) % len(skins)  # Переключение на следующий скин
+            elif event.key == pg.K_LEFT:
+                current_skin_index = (current_skin_index - 1) % len(skins)  # Переключение на следующий скин
+            elif event.key == pg.K_ESCAPE:
+                print("закрытие экрана")
 
     # Отображение фона
     scr.fill((255, 255, 255))  # Белый фон
