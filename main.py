@@ -3,6 +3,12 @@ from assets.gamelib.const import *
 from assets.gamelib.scripts import *
 from assets.gamelib.objects import *
 import sys
+""" Короче, при запуске проги используются горячие клавиши: 
+-esc = выход из окна, даже можно закрыть саму игру)
+-s = открытие скинчейнджера в главном меню
+-b = открытие магазина в скинчейнджере
+стрелочки в скинчейнджере = смена скина
+"""
 
 
 FIELDTEXTURES = {}
@@ -11,6 +17,20 @@ BALLTEXTURES = {}
 PLAYERTEXTURES = {}
 BGTEXTURES = {}
 DECOTEXTURES = {}
+
+skins_ingame = ['main_hero.png', 'loki.png', 'warrior.png']  # скины которые впринципе есть в игре
+skins_onacc = ['main_hero.png']  # скины доступные игроку
+skins_buyable = ['loki.png', 'warrior.png']  # скины которые можно купить
+money = 10
+
+
+def save_data():
+    global skins_buyable, skins_onacc, money
+    ''' 
+    короче здесь я думаю все понятно, после покупки скина у игрока отбираются money и skins_buyable при этом зачисляется
+    скин в skins_onacc 
+    '''
+    pass
 
 
 
@@ -65,24 +85,78 @@ def main_screen():
                 break
             if event.type == pg.KEYUP:
                 if event.key == pg.K_s:
-                    scrnow = SHOPSCR
+                    scrnow = SKINSCR
+                if event.key == pg.K_ESCAPE:
+                    pg.quit()
+                    running = False
+                    break
 
 
 def game_screen():
     pass
 
 
-def shop_screen():
-    global clock, scr, running, scrnow
+def skin_changer():
+    global clock, scr, running, scrnow, skins_onacc
     pg.init()
     clock = pg.time.Clock()
 
     pg.display.set_caption(f'{APPNAME} {APPVER}')
-
-    skinns = ['main_hero.png', 'loki.png', 'warrior.png']
-    skins = [pg.transform.scale(pg.image.load(f'assets/textures/player/{skin_file}'), (int(100 * 3), int(100 * 3)))
-             for skin_file in skinns]
     current_skin_index = 0
+    bought_skins = [pg.transform.scale(pg.image.load(f'assets/textures/player/{skin_file}'),
+                                       (int(100 * 3), int(100 * 3))) for skin_file in skins_onacc]
+
+    # Главный игровой цикл
+    while running and scrnow == SKINSCR:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+            if event.type == pg.KEYUP:
+                if event.key == pg.K_RIGHT:
+                    current_skin_index = (current_skin_index + 1) % len(bought_skins)  # Переключение на следующий скин
+                elif event.key == pg.K_LEFT:
+                    current_skin_index = (current_skin_index - 1) % len(bought_skins)  # Переключение на следующий скин
+                elif event.key == pg.K_ESCAPE:
+                    scrnow = MAINSCR
+                elif event.key == pg.K_b:
+                    scrnow = SHOPSCR
+
+        # Отображение фона
+        scr.fill((255, 255, 255))  # Белый фон
+        bg = pg.image.load('assets/textures/background/back.png')
+        bg = pg.transform.rotozoom(bg, 0, 1.4)
+        arr1 = pg.image.load('assets/textures/arrow.png')
+        arr2 = pg.transform.rotozoom(arr1, 180, 1)
+        back = pg.transform.rotozoom(arr1, 180, 1.5)
+
+        # Отображение текущего скина
+        current_skin = bought_skins[current_skin_index]
+        scr.blit(bg, (0, 0))
+        if current_skin_index == 2:
+            scr.blit(current_skin, (170, 50))
+        elif current_skin_index == 0:
+            scr.blit(current_skin, (180, 50))
+        else:
+            scr.blit(current_skin, (190, 50))
+        scr.blit(arr1, (370, 300))
+        scr.blit(arr2, (240, 300))
+        scr.blit(back, (0, 0))
+        # Обновление дисплея
+        pg.display.flip()
+
+        # Ограничение FPS
+        pg.time.Clock().tick(30)
+
+
+def shop_screen():
+    global clock, scr, running, scrnow, skins_onacc, skins_buyable
+    pg.init()
+    clock = pg.time.Clock()
+
+    pg.display.set_caption(f'{APPNAME} {APPVER}')
+    choose_skins = [pg.transform.scale(pg.image.load(f'assets/textures/player/{skin_file}'),
+                                       (int(100 * 3), int(100 * 3))) for skin_file in skins_buyable]
 
     # Главный игровой цикл
     while running and scrnow == SHOPSCR:
@@ -91,23 +165,23 @@ def shop_screen():
                 pg.quit()
                 sys.exit()
             if event.type == pg.KEYUP:
-                if event.key == pg.K_RIGHT:
-                    current_skin_index = (current_skin_index + 1) % len(skins)  # Переключение на следующий скин
-                elif event.key == pg.K_LEFT:
-                    current_skin_index = (current_skin_index - 1) % len(skins)  # Переключение на следующий скин
-                elif event.key == pg.K_ESCAPE:
-                    scrnow = MAINSCR
+                if event.key == pg.K_ESCAPE:
+                    scrnow = SKINSCR
+                '''if event.key == pg.K_1:
+                    if money >='''
 
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
         bg = pg.image.load('assets/textures/background/back.png')
         bg = pg.transform.rotozoom(bg, 0, 1.4)
+        arr1 = pg.image.load('assets/textures/arrow.png')
+        back = pg.transform.rotozoom(arr1, 180, 1.5)
 
         # Отображение текущего скина
-        current_skin = skins[current_skin_index]
         scr.blit(bg, (0, 0))
-        scr.blit(current_skin, (190, 50))
-
+        scr.blit(choose_skins[0], (20, 50))
+        scr.blit(choose_skins[1], (300, 50))
+        scr.blit(back, (0, 0))
         # Обновление дисплея
         pg.display.flip()
 
@@ -135,5 +209,8 @@ while running:
         main_screen()
     elif scrnow == GAMESCR:
         game_screen()
+    elif scrnow == SKINSCR:
+        skin_changer()
     elif scrnow == SHOPSCR:
         shop_screen()
+

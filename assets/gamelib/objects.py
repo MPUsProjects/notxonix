@@ -95,6 +95,7 @@ class Button(pg.sprite.Sprite):
         self.center = center
         self.size = size
         self.surface = pg.Surface(size)
+        self.rect = pg.Rect((0, 0), (0, 0))
         self.rect.x = int(center[0] - size[0] / 2)
         self.rect.y = int(center[1] - size[1] / 2)
 

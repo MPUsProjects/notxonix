@@ -9,12 +9,28 @@ APPVER = 'indev-20250128'
 MAINSCR = 1
 GAMESCR = 2
 SHOPSCR = 3
+SKINSCR = 4
 
 # controls (управление)
 KUP = pg.K_UP
 KDOWN = pg.K_DOWN
 KLEFT = pg.K_LEFT
 KRIGHT = pg.K_RIGHT
+
+# prices
+free = 0
+normal = 5
+rare = 10
+epic = 20
+legendary = 50
+
+# rarities
+miner = free
+loki = legendary
+warrior = normal
+
+# skins
+
 
 # cellcodes
 __CELLPLAYER = '@'
