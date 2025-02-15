@@ -3,7 +3,7 @@ import pygame as pg
 
 # базовые
 APPNAME = 'Notxonix'
-APPVER = 'indev-20250128'
+APPVER = 'indev-20250215'
 
 # технические
 MAINSCR = 1
@@ -18,18 +18,21 @@ KLEFT = pg.K_LEFT
 KRIGHT = pg.K_RIGHT
 
 # prices
-free = 0
-normal = 5
-rare = 10
-epic = 20
-legendary = 50
+FREE = 0
+NORMAL = 5
+RARE = 10
+EPIC = 20
+LEGENDARY = 50
 
 # rarities
-miner = free
-loki = legendary
-warrior = normal
+MINER = FREE
+LOKI = LEGENDARY
+WARRIOR = RARE
 
 # skins
+LOKI_SKIN = 'loki.png'
+MINER_SKIN = 'main_hero.png'
+WARRIOR_SKIN = 'warrior.png'
 
 
 # cellcodes

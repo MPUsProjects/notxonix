@@ -167,8 +167,22 @@ def shop_screen():
             if event.type == pg.KEYUP:
                 if event.key == pg.K_ESCAPE:
                     scrnow = SKINSCR
-                '''if event.key == pg.K_1:
-                    if money >='''
+                if event.key == pg.K_1:
+                    if skins_buyable[0] not in skins_onacc:
+                        if money >= skin_check(skins_buyable[0]):
+                            skins_onacc.append(skins_buyable[0])
+                        else:
+                            print("НЕДОСТАТОЧНО ДЕНЕГ")
+                    else:
+                        print("СКИН УЖЕ ЕСТЬ НА АККАУНТЕ")
+                if event.key == pg.K_2:
+                    if skins_buyable[1] not in skins_onacc:
+                        if money >= skin_check(skins_buyable[1]):
+                            skins_onacc.append(skins_buyable[1])
+                        else:
+                            print("НЕДОСТАТОЧНО ДЕНЕГ")
+                    else:
+                        print("СКИН УЖЕ ЕСТЬ НА АККАУНТЕ")
 
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон

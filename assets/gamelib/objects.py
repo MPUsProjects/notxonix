@@ -132,3 +132,12 @@ class CloudDB:
 
     def write_storage(self, name):
         pass
+
+
+def skin_check(skin):
+    if skin == assets.gamelib.const.LOKI_SKIN:
+        return assets.gamelib.const.LOKI
+    elif skin == assets.gamelib.const.WARRIOR_SKIN:
+        return assets.gamelib.const.WARRIOR
+    elif skin == assets.gamelib.const.MINER_SKIN:
+        return assets.gamelib.const.MINER
