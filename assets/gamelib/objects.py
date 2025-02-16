@@ -2,7 +2,7 @@ import pygame as pg
 import firebase_admin as fba
 from firebase_admin import db
 import assets.gamelib.const
-
+from sqlite3 import connect as sqlconnect
 
 
 CELLVOID = 1  # поле шарика
@@ -114,6 +114,33 @@ class Button(pg.sprite.Sprite):
 
 
 # Исполнительные классы
+class LocalDB:
+    def __init__(self, dbfile):
+        self.connectobj = sqlconnect(dbfile)
+        self.db = self.connectobj.cursor()
+
+    def get(self, key):
+        # Результат лишь один, т.к. ключ уникален по условию, прописанному в бд
+        return self.db.execute(f"""SELECT value FROM datatable WHERE key = '{key}'""").fetchall()[0][0]
+
+    def get_all(self):
+        '''Возвращает словарь key: value, соответствующий базе данных'''
+        return dict(self.db.execute("""SELECT key, value FROM datatable""").fetchall())
+
+    def save(self, keyvaluedict: dict):
+        for key in keyvaluedict.keys():
+            value = keyvaluedict[key]
+            # Проверка на существование - если есть такая ячейка, пишем в неё, иначе делаем новую
+            if len(self.db.execute(f"""SELECT key FROM datatable WHERE key = '{key}'""").fetchall()) > 0:
+                self.db.execute(f"""UPDATE datatable SET value = '{value}' WHERE key = '{key}'""")
+            else:
+                self.db.execute(f"""INSERT INTO datatable(key, value) VALUES('{key}', '{value}')""")
+        self.connectobj.commit()  # коммитим изменения в бд, чтобы они вступили в силу
+
+    def close(self):
+        self.connectobj.close()
+
+
 class CloudDB:
     def __init__(self):
         cred = fba.credentials.Certificate(assets.gamelib.const.DBCERT)

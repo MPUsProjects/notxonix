@@ -10,6 +10,7 @@ MAINSCR = 1
 GAMESCR = 2
 SHOPSCR = 3
 SKINSCR = 4
+LDBFILE = 'data/playerdata.db'
 
 # controls (управление)
 KUP = pg.K_UP

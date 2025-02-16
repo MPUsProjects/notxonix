@@ -26,6 +26,13 @@ skins_buyable = ['loki.png', 'warrior.png']  # скины которые мож�
 money = 10
 
 
+def shutdown():
+    global running
+    running = False
+    pg.quit()
+    # здесь будет сохранение данных в ldb
+
+
 def save_data():
     global skins_buyable, skins_onacc, money
     ''' 
@@ -82,8 +89,7 @@ def main_screen():
         pg.display.update()
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                pg.quit()
-                running = False
+                shutdown()
                 break
             if event.type == pg.KEYUP:
                 if event.key == pg.K_s:
@@ -112,9 +118,9 @@ def skin_changer():
     while running and scrnow == SKINSCR:
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
-            if event.type == pg.KEYUP:
+                shutdown()
+                break
+            elif event.type == pg.KEYUP:
                 if event.key == pg.K_RIGHT:
                     current_skin_index = (current_skin_index + 1) % len(bought_skins)  # Переключение на следующий скин
                 elif event.key == pg.K_LEFT:
@@ -164,8 +170,8 @@ def shop_screen():
     while running and scrnow == SHOPSCR:
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
+                shutdown()
+                break
             if event.type == pg.KEYUP:
                 if event.key == pg.K_ESCAPE:
                     scrnow = SKINSCR
@@ -216,6 +222,7 @@ ball1 = pg.image.load('assets/textures/player/ball1.png')
 
 # настройка
 clock = pg.time.Clock()
+ldb = LocalDB(LDBFILE)
 
 # игровой цикл
 loading_screen()  # загрузим ресурсы игры
