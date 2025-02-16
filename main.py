@@ -27,10 +27,11 @@ money = 10
 
 
 def shutdown():
-    global running
+    global running, ldb, gamedb
     running = False
     pg.quit()
-    # здесь будет сохранение данных в ldb
+    ldb.save(gamedb)
+    ldb.close()
 
 
 def save_data():
@@ -223,6 +224,7 @@ ball1 = pg.image.load('assets/textures/player/ball1.png')
 # настройка
 clock = pg.time.Clock()
 ldb = LocalDB(LDBFILE)
+gamedb = ldb.get_all()
 
 # игровой цикл
 loading_screen()  # загрузим ресурсы игры
