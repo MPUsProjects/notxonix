@@ -12,6 +12,19 @@ SHOPSCR = 3
 SKINSCR = 4
 LDBFILE = 'data/playerdata.db'
 
+# decor
+ARR = pg.image.load('assets/textures/arrow.png')
+ARR2 = pg.transform.rotozoom(ARR, 180, 1)
+BACK = pg.transform.rotozoom(ARR, 180, 1.5)
+FOR = pg.transform.rotozoom(BACK, 180, 1)
+pg.init()
+FONT = pg.font.SysFont("timesnewroman", 26)
+TITLE = pg.font.SysFont("timesnewroman", 52)
+BF = FONT.render("назад", True, (255, 255, 255))
+MF = FONT.render("магазин", True, (255, 255, 255))
+MT = TITLE.render("МАГАЗИН", True, (255, 255, 255))
+ST = TITLE.render("ВЫБЕРИТЕ СКИН", True, (255, 255, 255))
+
 # controls (управление)
 KUP = pg.K_UP
 KDOWN = pg.K_DOWN
@@ -34,7 +47,8 @@ WARRIOR = RARE
 LOKI_SKIN = 'loki.png'
 MINER_SKIN = 'main_hero.png'
 WARRIOR_SKIN = 'warrior.png'
-
+LB = False
+WB = False
 
 # cellcodes
 __CELLPLAYER = '@'

@@ -121,23 +121,27 @@ def skin_changer():
             if event.type == pg.QUIT:
                 shutdown()
                 break
-            elif event.type == pg.KEYUP:
+            if event.type == pg.KEYUP:
                 if event.key == pg.K_RIGHT:
                     current_skin_index = (current_skin_index + 1) % len(bought_skins)  # Переключение на следующий скин
                 elif event.key == pg.K_LEFT:
                     current_skin_index = (current_skin_index - 1) % len(bought_skins)  # Переключение на следующий скин
                 elif event.key == pg.K_ESCAPE:
                     scrnow = MAINSCR
-                elif event.key == pg.K_b:
+            if event.type == pg.MOUSEBUTTONUP:
+                cor = event.pos
+                if cor[0] <= 60 and 20 <= cor[1] <= 40:
+                    scrnow = MAINSCR
+                if cor[0] >= 570 and 20 <= cor[1] <= 40:
                     scrnow = SHOPSCR
-
+                if 260 <= cor[0] <= 320 and 300 <= cor[1] <= 360:
+                    current_skin_index = (current_skin_index - 1) % len(bought_skins)  # Переключение на следующий скин
+                if 390 <= cor[0] <= 550 and 300 <= cor[1] <= 360:
+                    current_skin_index = (current_skin_index + 1) % len(bought_skins)  # Переключение на следующий скин
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
         bg = pg.image.load('assets/textures/background/back.png')
         bg = pg.transform.rotozoom(bg, 0, 1.4)
-        arr1 = pg.image.load('assets/textures/arrow.png')
-        arr2 = pg.transform.rotozoom(arr1, 180, 1)
-        back = pg.transform.rotozoom(arr1, 180, 1.5)
 
         # Отображение текущего скина
         current_skin = bought_skins[current_skin_index]
@@ -148,9 +152,13 @@ def skin_changer():
             scr.blit(current_skin, (180, 50))
         else:
             scr.blit(current_skin, (190, 50))
-        scr.blit(arr1, (370, 300))
-        scr.blit(arr2, (240, 300))
-        scr.blit(back, (0, 0))
+        scr.blit(ARR, (370, 300))
+        scr.blit(ARR2, (240, 300))
+        scr.blit(BACK, (0, 0))
+        scr.blit(FOR, (565, 0))
+        scr.blit(BF, (60, 21))
+        scr.blit(MF, (493, 21))
+        scr.blit(ST, (124, 20))
         # Обновление дисплея
         pg.display.flip()
 
@@ -159,7 +167,7 @@ def skin_changer():
 
 
 def shop_screen():
-    global clock, scr, running, scrnow, skins_onacc, skins_buyable
+    global clock, scr, running, scrnow, skins_onacc, skins_buyable, money, LB, WB
     pg.init()
     clock = pg.time.Clock()
 
@@ -175,11 +183,13 @@ def shop_screen():
                 break
             if event.type == pg.KEYUP:
                 if event.key == pg.K_ESCAPE:
-                    scrnow = SKINSCR
+                    scrnow = MAINSCR
                 if event.key == pg.K_1:
                     if skins_buyable[0] not in skins_onacc:
                         if money >= skin_check(skins_buyable[0]):
                             skins_onacc.append(skins_buyable[0])
+                            money -= skin_check(skins_buyable[0])
+                            LB = True
                         else:
                             print("НЕДОСТАТОЧНО ДЕНЕГ")
                     else:
@@ -188,23 +198,31 @@ def shop_screen():
                     if skins_buyable[1] not in skins_onacc:
                         if money >= skin_check(skins_buyable[1]):
                             skins_onacc.append(skins_buyable[1])
+                            money -= skin_check(skins_buyable[1])
+                            WB = True
                         else:
                             print("НЕДОСТАТОЧНО ДЕНЕГ")
                     else:
                         print("СКИН УЖЕ ЕСТЬ НА АККАУНТЕ")
+            if event.type == pg.MOUSEBUTTONUP:
+                cor = event.pos
+                if cor[0] <= 60 and 20 <= cor[1] <= 40:
+                    scrnow = SKINSCR
 
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
         bg = pg.image.load('assets/textures/background/back.png')
         bg = pg.transform.rotozoom(bg, 0, 1.4)
-        arr1 = pg.image.load('assets/textures/arrow.png')
-        back = pg.transform.rotozoom(arr1, 180, 1.5)
 
         # Отображение текущего скина
         scr.blit(bg, (0, 0))
-        scr.blit(choose_skins[0], (20, 50))
-        scr.blit(choose_skins[1], (300, 50))
-        scr.blit(back, (0, 0))
+        if not LB:
+            scr.blit(choose_skins[0], (20, 50))
+        if not WB:
+            scr.blit(choose_skins[1], (300, 50))
+        scr.blit(BACK, (0, 0))
+        scr.blit(BF, (60, 21))
+        scr.blit(MT, (100, 21))
         # Обновление дисплея
         pg.display.flip()
 
@@ -238,4 +256,3 @@ while running:
         skin_changer()
     elif scrnow == SHOPSCR:
         shop_screen()
-
