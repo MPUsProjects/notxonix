@@ -1,5 +1,5 @@
 import pygame as pg
-
+from assets.textures import *
 
 # базовые
 APPNAME = 'Notxonix'
@@ -19,11 +19,11 @@ BACK = pg.transform.rotozoom(ARR, 180, 1.5)
 FOR = pg.transform.rotozoom(BACK, 180, 1)
 pg.init()
 FONT = pg.font.SysFont("timesnewroman", 26)
-TITLE = pg.font.SysFont("timesnewroman", 52)
-BF = FONT.render("назад", True, (255, 255, 255))
-MF = FONT.render("магазин", True, (255, 255, 255))
-MT = TITLE.render("МАГАЗИН", True, (255, 255, 255))
-ST = TITLE.render("ВЫБЕРИТЕ СКИН", True, (255, 255, 255))
+TITLE = pg.font.SysFont("timesnewroman", 42)
+BF = FONT.render("назад", True, (255, 255, 255))  # BF = Back Font
+MF = FONT.render("магазин", True, (255, 255, 255))  # MF = Magazin Font
+MT = TITLE.render("МАГАЗИН", True, (255, 255, 255))  # MT = Magazin Title
+ST = TITLE.render("ВЫБЕРИТЕ СКИН", True, (255, 255, 255))  # ST = Skinchanger Title
 
 # controls (управление)
 KUP = pg.K_UP
@@ -42,13 +42,15 @@ LEGENDARY = 50
 MINER = FREE
 LOKI = LEGENDARY
 WARRIOR = RARE
+MEXICANES = EPIC
 
 # skins
 LOKI_SKIN = 'loki.png'
 MINER_SKIN = 'main_hero.png'
 WARRIOR_SKIN = 'warrior.png'
-LB = False
-WB = False
+MEXICAN_SKIN = 'mexicanes.png'
+LB = False  # Loki Bought
+WB = False  # Warrior Bought
 
 # cellcodes
 __CELLPLAYER = '@'

@@ -3,6 +3,7 @@ import firebase_admin as fba
 from firebase_admin import db
 import assets.gamelib.const
 from sqlite3 import connect as sqlconnect
+import random
 
 
 CELLVOID = 1  # поле шарика
@@ -168,3 +169,7 @@ def skin_check(skin):
         return assets.gamelib.const.WARRIOR
     elif skin == assets.gamelib.const.MINER_SKIN:
         return assets.gamelib.const.MINER
+
+
+def randomm():
+    return random.randrange(len(skins_buyable))

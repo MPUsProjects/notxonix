@@ -20,9 +20,9 @@ PLAYERTEXTURES = {}
 BGTEXTURES = {}
 DECOTEXTURES = {}
 
-skins_ingame = ['main_hero.png', 'loki.png', 'warrior.png']  # скины которые впринципе есть в игре
+skins_ingame = ['main_hero.png', 'loki.png', 'warrior.png', 'mexicanes.png']  # скины которые впринципе есть в игре
 skins_onacc = ['main_hero.png']  # скины доступные игроку
-skins_buyable = ['loki.png', 'warrior.png']  # скины которые можно купить
+skins_buyable = ['loki.png', 'warrior.png', 'mexicanes.png']  # скины которые можно купить
 money = 10
 
 
@@ -102,7 +102,7 @@ def main_screen():
 
 
 def game_screen():
-    pass
+    print('I AM SORRY BOY')
 
 
 def skin_changer():
