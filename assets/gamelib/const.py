@@ -10,6 +10,7 @@ MAINSCR = 1
 GAMESCR = 2
 SHOPSCR = 3
 SKINSCR = 4
+BUYSCR = 5
 LDBFILE = 'data/playerdata.db'
 
 # decor
@@ -24,6 +25,10 @@ BF = FONT.render("назад", True, (255, 255, 255))  # BF = Back Font
 MF = FONT.render("магазин", True, (255, 255, 255))  # MF = Magazin Font
 MT = TITLE.render("МАГАЗИН", True, (255, 255, 255))  # MT = Magazin Title
 ST = TITLE.render("ВЫБЕРИТЕ СКИН", True, (255, 255, 255))  # ST = Skinchanger Title
+'YES = TITLE.render("ДА", True, (255, 255, 255))'
+'NO = TITLE.render("НЕТ", True, (255, 255, 255))'
+MO = pg.image.load('assets/textures/cash.png')
+MON = pg.transform.rotozoom(MO, 0, 1.2)
 
 # controls (управление)
 KUP = pg.K_UP
@@ -49,8 +54,6 @@ LOKI_SKIN = 'loki.png'
 MINER_SKIN = 'main_hero.png'
 WARRIOR_SKIN = 'warrior.png'
 MEXICAN_SKIN = 'mexicanes.png'
-LB = False  # Loki Bought
-WB = False  # Warrior Bought
 
 # cellcodes
 __CELLPLAYER = '@'
@@ -92,3 +95,9 @@ DBCERT = {"type": "service_account",
           "universe_domain": "googleapis.com"
           }
 DBURL = "https://notxonix-game-default-rtdb.europe-west1.firebasedatabase.app"
+
+#  переменные в дб
+"WB = warrior bought"
+"LB = loki bought"
+"MainB = main_skin bought"
+"MexB = mexican bought"

@@ -170,6 +170,3 @@ def skin_check(skin):
     elif skin == assets.gamelib.const.MINER_SKIN:
         return assets.gamelib.const.MINER
 
-
-def randomm():
-    return random.randrange(len(skins_buyable))
