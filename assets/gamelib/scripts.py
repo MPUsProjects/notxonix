@@ -18,11 +18,11 @@ def load_textures(type: str, scale: int = -1):
 
 
 def load_field_textures():
-    return load_textures('field', 45)
+    return load_textures('field', 40)
 
 
 def load_wall_textures():
-    return load_textures('wall', 45)
+    return load_textures('wall', 40)
 
 
 def load_ball_textures():

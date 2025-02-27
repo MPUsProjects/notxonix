@@ -51,7 +51,7 @@ def main_screen():
     # прочая настройка для экрана
     bg_coord = 0
     # bg = pg.image.load('assets/textures/background/background_menu_movable.jpg')
-    bg = pg.image.load('assets/textures/background/menunegotovo.png')
+    bg = load_bg_textures()['menunegotovo']
     # bg = pg.image.load('assets/textures/background/loading_screen1.png')
 
     while running and scrnow == MAINSCR:
