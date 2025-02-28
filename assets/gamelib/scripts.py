@@ -39,3 +39,7 @@ def load_bg_textures():
 
 def load_deco_textures():
     return load_textures('deco')
+
+
+def load_misc_textures():
+    return load_textures('misc')

@@ -31,7 +31,7 @@ def loading_screen():
     global scr, FIELDTEXTURES, WALLTEXTURES, BALLTEXTURES, PLAYERTEXTURES, BGTEXTURES, DECOTEXTURES
 
     # Сделаем пользователю картинку загрузки, чтобы не беспокоился
-    scr.blit(pg.image.load('assets/textures/background/loading_screen1.png'), (0, 0))
+    scr.blit(BG['loading_screen1'], (0, 0))
     pg.display.update()
 
     # Загрузка текстур разных видов
@@ -51,7 +51,7 @@ def main_screen():
     # прочая настройка для экрана
     bg_coord = 0
     # bg = pg.image.load('assets/textures/background/background_menu_movable.jpg')
-    bg = load_bg_textures()['menunegotovo']
+    bg = BG['menunegotovo']
     # bg = pg.image.load('assets/textures/background/loading_screen1.png')
 
     while running and scrnow == MAINSCR:
@@ -65,7 +65,12 @@ def main_screen():
         bg_coord -= time * 0.02
         if bg_coord <= -503:
             bg_coord = 0
-
+        scr.blit(BTN, (200, 0))
+        scr.blit(BTN, (200, 60))
+        scr.blit(BTN, (200, 120))
+        scr.blit(GAME, (280, 110))
+        scr.blit(MT1, (265, 170))
+        scr.blit(LEAVE, (280, 230))
         # технический блок
         pg.display.update()
         for event in pg.event.get():
@@ -117,7 +122,7 @@ def skin_changer():
                     current_skin_index = (current_skin_index + 1) % len(skins_pic)  # Переключение на следующий скин
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
-        bg = pg.image.load('assets/textures/background/back.png')
+        bg = BG['back']
         bg = pg.transform.rotozoom(bg, 0, 1.4)
 
         # Отображение текущего скина
@@ -189,7 +194,7 @@ def shop_screen():
 
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
-        bg = pg.image.load('assets/textures/background/back.png')
+        bg = BG['back']
         bg = pg.transform.rotozoom(bg, 0, 1.4)
 
         # Отображение текущего скина
@@ -243,10 +248,10 @@ def buy_screen():
 pg.init()
 scr = pg.display.set_mode((640, 360))
 pg.display.set_caption(f'{APPNAME} {APPVER}')
-pg.display.set_icon(pg.image.load('assets/textures/player/ballpepsi.png'))
+pg.display.set_icon(pg.transform.rotozoom(BALLS['ballpepsi'], 0, 100))
 running = True
 scrnow = MAINSCR
-ball1 = pg.image.load('assets/textures/player/ball1.png')
+ball1 = BALLS['ball1']
 
 # настройка
 clock = pg.time.Clock()

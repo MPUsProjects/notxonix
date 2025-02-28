@@ -1,5 +1,5 @@
 import pygame as pg
-from assets.textures import *
+from assets.gamelib.scripts import *
 
 # базовые
 APPNAME = 'Notxonix'
@@ -13,8 +13,19 @@ SKINSCR = 4
 BUYSCR = 5
 LDBFILE = 'data/playerdata.db'
 
-# decor
-ARR = pg.image.load('assets/textures/arrow.png')
+# textures
+FIELD = load_field_textures()
+WALLS = load_wall_textures()
+BALLS = load_ball_textures()
+PLAYERS = load_player_textures()
+BG = load_bg_textures()
+DECO = load_deco_textures()
+MISC = load_misc_textures()
+
+# deco
+ARR = MISC['arrow']
+BTN = pg.transform.rotozoom(MISC['button'], 0, 5)
+MONEY = MISC['cash']
 ARR2 = pg.transform.rotozoom(ARR, 180, 1)
 BACK = pg.transform.rotozoom(ARR, 180, 1.5)
 FOR = pg.transform.rotozoom(BACK, 180, 1)
@@ -27,8 +38,10 @@ MT = TITLE.render("МАГАЗИН", True, (255, 255, 255))  # MT = Magazin Title
 ST = TITLE.render("ВЫБЕРИТЕ СКИН", True, (255, 255, 255))  # ST = Skinchanger Title
 'YES = TITLE.render("ДА", True, (255, 255, 255))'
 'NO = TITLE.render("НЕТ", True, (255, 255, 255))'
-MO = pg.image.load('assets/textures/cash.png')
-MON = pg.transform.rotozoom(MO, 0, 1.2)
+MON = pg.transform.rotozoom(MONEY, 0, 1.2)  # money resized
+GAME = FONT.render("ИГРАТЬ", True, (255, 255, 255))
+LEAVE = FONT.render("ВЫЙТИ", True, (255, 255, 255))
+MT1 = FONT.render("МАГАЗИН", True, (255, 255, 255))
 
 # controls (управление)
 KUP = pg.K_UP
@@ -101,3 +114,4 @@ DBURL = "https://notxonix-game-default-rtdb.europe-west1.firebasedatabase.app"
 "LB = loki bought"
 "MainB = main_skin bought"
 "MexB = mexican bought"
+'Money = деньги'
