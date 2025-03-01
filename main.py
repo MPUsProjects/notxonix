@@ -28,7 +28,7 @@ def loading_screen():
     """Возможно, обтянутый кожей живой человек и не машина никогда его не увидит - слишком мало время загрузки"""
 
     # Загружаем спрайты, звуки и прочее, чтобы во время игры был минимум файловой работы
-    global scr, FIELDTEXTURES, WALLTEXTURES, BALLTEXTURES, PLAYERTEXTURES, BGTEXTURES, DECOTEXTURES, GAMEBG
+    global scr, FIELDTEXTURES, WALLTEXTURES, BALLTEXTURES, PLAYERTEXTURES, BGTEXTURES, DECOTEXTURES
 
     # Сделаем пользователю картинку загрузки, чтобы не беспокоился
     scr.blit(pg.image.load('assets/textures/background/loading_screen1.png'), (0, 0))
@@ -45,7 +45,12 @@ def loading_screen():
     # Загрузка звуков разных видов (пока их нет :/ )
 
     # Отрисовка фона экрана игры
-
+    gamebg = pg.Surface(scr.get_size())
+    xsize, ysize = scr.get_size()
+    for i in range(0, xsize, 40):
+        for j in range(0, ysize, 40):
+            gamebg.blit(WALLTEXTURES['wall1'], (i, j))
+    BGTEXTURES['gamebg'] = gamebg
 
 
 def main_screen():
@@ -91,7 +96,8 @@ def main_screen():
                 x = event.pos[0]
                 y = event.pos[1]
                 if 255 < x < 390 and 90 < y < 150:
-                    game_screen()
+                    scrnow = GAMESCR
+                    break
                 elif 255 < x < 390 and 160 < y < 210:
                     scrnow = SKINSCR
                 elif 255 < x < 390 and 220 < y < 270:
@@ -104,7 +110,14 @@ def game_screen():
     print('тут пока нет, приноси свои извинения')
     global scr, scrnow, clock, running
 
+
     while running and scrnow == GAMESCR:
+        # тех часть
+        scr.blit(BGTEXTURES['gamebg'], (0, 0))
+
+        # основная часть
+
+        # тех часть
         pg.display.update()
         for event in pg.event.get():
             # проверка на закрытие
@@ -283,7 +296,6 @@ scr = pg.display.set_mode((640, 360))
 pg.display.set_caption(f'{APPNAME} {APPVER}')
 running = True
 scrnow = MAINSCR
-GAMEBG = pg.Surface(scr.get_size())
 
 # настройка
 clock = pg.time.Clock()
