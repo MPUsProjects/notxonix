@@ -33,9 +33,14 @@ class Cell:
         self.playerhere = newstate
 
 
+# класс доски (технические классы)
+def board_standart_death_func():
+    print('you lost')
+
+
 class Board:
     def __init__(self, origin: tuple[int, int], size: tuple[int, int], cellsize: int, field_texture: pg.Surface,
-                 trail_texture: pg.Surface, void_texture: pg.Surface):
+                 trail_texture: pg.Surface, void_texture: pg.Surface, ballspritegroup: pg.sprite.Group):
         self.field_texture = field_texture
         self.trail_texture = trail_texture
         self.void_texture = void_texture
@@ -44,9 +49,12 @@ class Board:
         self.board = list(map(lambda x: list(map(lambda y: Cell(self, (x, y)), range(size[1]))), range(size[0])))
         self.origin = origin
 
-    def read_file(self, file):
-        with open(file) as f:
-            self.board = list(map(lambda x: list(map(lambda y: None, x)), f.readlines()))
+        self.playertexture = pg.Surface((40, 40))
+        self.playertexture.fill('2bb552')
+        self.playerpos = (0, 0)
+        self.deathfunc = board_standart_death_func
+
+        self.ballgroup = ballspritegroup
 
     def __create_cell(self, coords: tuple[int, int], cellcode: str):
         if cellcode == assets.gamelib.const.__CELLPLAYER:
@@ -57,7 +65,14 @@ class Board:
             return Cell(self, coords, CELLFIELD)
 
     def __set_standart_board(self):
-        pass
+        self.board = list(map(lambda y: list(map(lambda x: self.__create_cell((y, x)), range(14))), range(7)))
+        for i in range(14):
+            self.board[0][i].set_cell_state(CELLFIELD)
+            self.board[-1][i].set_cell_state(CELLFIELD)
+        for j in range(1, 7):
+            self.board[j][0].set_cell_state(CELLFIELD)
+            self.board[j][-1].set_cell_state(CELLFIELD)
+        self.board[0][0].set_player_state(True)
 
     def draw(self, scr: pg.Surface):
         for i in range(self.bsize[1]):
@@ -78,6 +93,29 @@ class Board:
                 self.origin[0] <= coords[1] < self.origin[1] + self.cellsize * self.bsize[0]):
             return ((coords[1] - self.origin[1]) // self.cellsize, (coords[0] - self.origin[0]) // self.cellsize)
         return None
+
+    def set_player_pos(self, newpos: tuple[int, int]):
+        '''newpos: tuple(row, col)'''
+        if 0 <= newpos[0] < len(self.board) and 0 <= newpos[1] < len(self.board[0]):
+            if self.board[newpos[0]][newpos[1]].get_cell_state() == CELLVOID:
+                self.board[newpos[0]][newpos[1]].set_cell_state(CELLTRAIL)
+            elif self.board[newpos[0]][newpos[1]].get_cell_state() == CELLTRAIL:
+                self.deathfunc()
+            elif (self.board[newpos[0]][newpos[1]].get_cell_state() == CELLFIELD and
+                  self.board[self.playerpos[0]][self.playerpos[1]].get_cell_state() == CELLTRAIL):
+                pass
+
+            self.board[self.playerpos[0]][self.playerpos[1]].set_player_state(False)
+            self.board[newpos[0]][newpos[1]].set_player_state(True)
+            self.playerpos = newpos
+
+    def move_player(self, row: int, col: int):
+        '''-1 <= int(row) <= 1
+        -1 <= int(col) <= 1'''
+        self.set_player_pos((self.playerpos[0] + row, self.playerpos[1] + col))
+
+    def fill_new_territory(self):
+        pass
 
 
 "self.image = skin_check(gamedb['Skin'])"  # для отображения картинки скина
