@@ -54,14 +54,16 @@ LEGENDARY = 50
 # rarities
 MINER = FREE
 LOKI = LEGENDARY
-WARRIOR = RARE
+WARRIOR = NORMAL
 MEXICANES = EPIC
+SHREK = RARE
 
 # skins
 LOKI_SKIN = 'loki.png'
 MINER_SKIN = 'main_hero.png'
 WARRIOR_SKIN = 'warrior.png'
 MEXICAN_SKIN = 'mexicanes.png'
+SHREK_SKIN = 'shrek.png'
 
 # cellcodes
 __CELLPLAYER = '@'
@@ -111,3 +113,4 @@ DBURL = "https://notxonix-game-default-rtdb.europe-west1.firebasedatabase.app"
 "MexB = mexican bought"
 'Money = деньги'
 "Skin - выбранный скин"
+"ShrekB - shrek bought"
