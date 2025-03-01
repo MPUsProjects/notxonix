@@ -12,7 +12,9 @@ PLAYERTEXTURES = {}
 BGTEXTURES = {}
 DECOTEXTURES = {}
 
-skins_ingame = ['main_hero.png', 'loki.png', 'warrior.png', 'mexicanes.png']  # скины которые впринципе есть в игре
+skins_ingame = ['main_hero.png', 'loki.png', 'warrior.png', 'mexicanes.png', 'shrek.png']
+# скины которые впринципе есть в игре
+
 skins_onacc = ['main_hero.png']
 
 
@@ -109,7 +111,6 @@ def main_screen():
 def game_screen():
     print('тут пока нет, приноси свои извинения')
     global scr, scrnow, clock, running
-
 
     while running and scrnow == GAMESCR:
         # тех часть
@@ -240,6 +241,15 @@ def shop_screen():
                                                                 (int(100 * 3), int(100 * 3))))
                         else:
                             print("НЕДОСТАТОЧНО ДЕНЕГ")
+                    elif gamedb['WB'] == '1' and gamedb["ShrekB"] == '0':
+                        if money >= SHREK:
+                            gamedb["ShrekB"] = '1'
+                            money -= SHREK
+                            gamedb['Money'] = str(money)
+                            skins_pic.append(pg.transform.scale(pg.image.load(f'assets/textures/player/shrek.png'),
+                                                                (int(100 * 3), int(100 * 3))))
+                        else:
+                            print("НЕДОСТАТОЧНО ДЕНЕГ")
 
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
@@ -254,6 +264,8 @@ def shop_screen():
             scr.blit(skins_pic1[2], (300, 50))
         if gamedb['LB'] == '1' and gamedb['MexB'] == '0':
             scr.blit(skins_pic1[3], (20, 50))
+        if gamedb['WB'] == '1' and gamedb['ShrekB'] == '0':
+            scr.blit(skins_pic1[4], (300, 50))
         scr.blit(BACK, (0, 0))
         scr.blit(BF, (60, 21))
         scr.blit(MT, (210, 21))
@@ -304,8 +316,10 @@ gamedb = ldb.get_all()
 '''gamedb['WB'] = '0'
 gamedb['LB'] = '0'
 gamedb["MexB"] = '0'
+gamedb["ShrekB"] = '0'
 gamedb['Money'] = '0'
-gamedb['Skin'] = '0'''
+gamedb['Skin'] = '0'
+gamedb['Money'] = '100'''
 money = int(gamedb['Money'])
 if gamedb['LB'] == '1':
     skins_onacc.append(LOKI_SKIN)
@@ -313,6 +327,8 @@ if gamedb['WB'] == '1':
     skins_onacc.append(WARRIOR_SKIN)
 if gamedb['MexB'] == '1':
     skins_onacc.append(MEXICAN_SKIN)
+if gamedb['ShrekB'] == '1':
+    skins_onacc.append(SHREK_SKIN)
 skins_pic = [pg.transform.scale(pg.image.load(f'assets/textures/player/{skin_file}'),
                                     (int(100 * 3), int(100 * 3))) for skin_file in skins_onacc]
 skins_pic1 = [pg.transform.scale(pg.image.load(f'assets/textures/player/{skin_file}'),
