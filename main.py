@@ -101,6 +101,7 @@ def main_screen():
 
 
 def game_screen():
+    print('тут пока нет, приноси свои извинения')
     global scr, scrnow, clock, running
 
     while running and scrnow == GAMESCR:
