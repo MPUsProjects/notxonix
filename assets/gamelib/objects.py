@@ -3,8 +3,8 @@ import firebase_admin as fba
 from firebase_admin import db
 import assets.gamelib.const
 from sqlite3 import connect as sqlconnect
+from assets.gamelib.const import *
 import random
-
 
 CELLVOID = 1  # поле шарика
 CELLFIELD = 2  # поле игрока
@@ -80,12 +80,7 @@ class Board:
         return None
 
 
-class Player:
-    def __init__(self, board):
-        self.board = board
-
-    def move(self, key_pressed):
-        pass
+"self.image = skin_check(gamedb['Skin'])"  # для отображения картинки скина
 
 
 # "Визуальные" классы
@@ -162,11 +157,16 @@ class CloudDB:
         pass
 
 
-def skin_check(skin):
-    if skin == assets.gamelib.const.LOKI_SKIN:
-        return assets.gamelib.const.LOKI
-    elif skin == assets.gamelib.const.WARRIOR_SKIN:
-        return assets.gamelib.const.WARRIOR
-    elif skin == assets.gamelib.const.MINER_SKIN:
-        return assets.gamelib.const.MINER
+def skin_check(num):
+    if num == '1':
+        return assets.gamelib.const.LOKI_SKIN
+    elif num == '2':
+        return assets.gamelib.const.WARRIOR_SKIN
+    elif num == '0':
+        return assets.gamelib.const.MINER_SKIN
+    elif num == '3':
+        return assets.gamelib.const.MEXICAN_SKIN
 
+
+ldb = LocalDB(LDBFILE)
+gamedb = ldb.get_all()

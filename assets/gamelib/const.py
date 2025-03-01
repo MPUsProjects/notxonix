@@ -115,3 +115,4 @@ DBURL = "https://notxonix-game-default-rtdb.europe-west1.firebasedatabase.app"
 "MainB = main_skin bought"
 "MexB = mexican bought"
 'Money = деньги'
+"Skin - выбранный скин"

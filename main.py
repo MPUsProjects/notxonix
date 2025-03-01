@@ -106,8 +106,7 @@ def skin_changer():
     pg.init()
     clock = pg.time.Clock()
     pg.display.set_caption(f'{APPNAME} {APPVER}')
-    current_skin_index = 0
-
+    current_skin_index = int(gamedb['Skin'])
     # Главный игровой цикл
     while running and scrnow == SKINSCR:
         for event in pg.event.get():
@@ -117,8 +116,10 @@ def skin_changer():
             if event.type == pg.KEYUP:
                 if event.key == pg.K_RIGHT:
                     current_skin_index = (current_skin_index + 1) % len(skins_pic)  # Переключение на следующий скин
+                    gamedb['Skin'] = str(current_skin_index)
                 elif event.key == pg.K_LEFT:
-                    current_skin_index = (current_skin_index - 1) % len(skins_pic)  # Переключение на следующий скин
+                    current_skin_index = (current_skin_index - 1) % len(skins_pic)  # Переключение на предыдущий скин
+                    gamedb['Skin'] = str(current_skin_index)
                 elif event.key == pg.K_ESCAPE:
                     scrnow = MAINSCR
             if event.type == pg.MOUSEBUTTONUP:
@@ -128,9 +129,11 @@ def skin_changer():
                 if cor[0] >= 570 and 20 <= cor[1] <= 40:
                     scrnow = SHOPSCR
                 if 260 <= cor[0] <= 320 and 300 <= cor[1] <= 360:
-                    current_skin_index = (current_skin_index - 1) % len(skins_pic)  # Переключение на следующий скин
+                    current_skin_index = (current_skin_index - 1) % len(skins_pic)
+                    gamedb['Skin'] = str(current_skin_index)  # Переключение на предыдущий скин
                 if 390 <= cor[0] <= 550 and 300 <= cor[1] <= 360:
                     current_skin_index = (current_skin_index + 1) % len(skins_pic)  # Переключение на следующий скин
+                    gamedb['Skin'] = str(current_skin_index)
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
         bg = BG['back']
