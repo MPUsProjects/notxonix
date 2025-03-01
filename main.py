@@ -107,6 +107,7 @@ def skin_changer():
     clock = pg.time.Clock()
     pg.display.set_caption(f'{APPNAME} {APPVER}')
     current_skin_index = int(gamedb['Skin'])
+    print(current_skin_index)
     # Главный игровой цикл
     while running and scrnow == SKINSCR:
         for event in pg.event.get():
@@ -164,8 +165,6 @@ def skin_changer():
 
 def shop_screen():
     global clock, scr, running, scrnow, skins_onacc, money
-    pg.init()
-    clock = pg.time.Clock()
 
     pg.display.set_caption(f'{APPNAME} {APPVER}')
 
@@ -187,14 +186,18 @@ def shop_screen():
                         if money >= LOKI:
                             gamedb["LB"] = '1'
                             money -= LOKI
-                            gamedb['Money'] = str(money - LOKI)
+                            gamedb['Money'] = str(money)
+                            skins_pic.append(pg.transform.scale(pg.image.load(f'assets/textures/player/loki.png'),
+                                                                (int(100 * 3), int(100 * 3))))
                         else:
                             print("НЕДОСТАТОЧНО ДЕНЕГ")
                     elif gamedb['LB'] == '1' and gamedb["MexB"] == '0':
                         if money >= MEXICANES:
                             gamedb["MexB"] = '1'
                             money -= MEXICANES
-                            gamedb['Money'] = str(money - MEXICANES)
+                            gamedb['Money'] = str(money)
+                            skins_pic.append(pg.transform.scale(pg.image.load(f'assets/textures/player/mexicanes.png'),
+                                                                (int(100 * 3), int(100 * 3))))
                         else:
                             print("НЕДОСТАТОЧНО ДЕНЕГ")
                 if 300 <= cor[0] <= 490 and 70 <= cor[1] <= 360:
@@ -202,7 +205,9 @@ def shop_screen():
                         if money >= WARRIOR:
                             gamedb["WB"] = '1'
                             money -= WARRIOR
-                            gamedb['Money'] = str(money - WARRIOR)
+                            gamedb['Money'] = str(money)
+                            skins_pic.append(pg.transform.scale(pg.image.load(f'assets/textures/player/warrior.png'),
+                                                                (int(100 * 3), int(100 * 3))))
                         else:
                             print("НЕДОСТАТОЧНО ДЕНЕГ")
 
@@ -271,6 +276,11 @@ ball1 = BALLS['ball1']
 clock = pg.time.Clock()
 ldb = LocalDB(LDBFILE)
 gamedb = ldb.get_all()
+'''gamedb['WB'] = '0'
+gamedb['LB'] = '0'
+gamedb["MexB"] = '0'
+gamedb['Money'] = '0'
+gamedb['Skin'] = '0'''
 money = int(gamedb['Money'])
 if gamedb['LB'] == '1':
     skins_onacc.append(LOKI_SKIN)
@@ -279,7 +289,7 @@ if gamedb['WB'] == '1':
 if gamedb['MexB'] == '1':
     skins_onacc.append(MEXICAN_SKIN)
 skins_pic = [pg.transform.scale(pg.image.load(f'assets/textures/player/{skin_file}'),
-                                   (int(100 * 3), int(100 * 3))) for skin_file in skins_onacc]
+                                    (int(100 * 3), int(100 * 3))) for skin_file in skins_onacc]
 skins_pic1 = [pg.transform.scale(pg.image.load(f'assets/textures/player/{skin_file}'),
                                    (int(100 * 3), int(100 * 3))) for skin_file in skins_ingame]
 # игровой цикл

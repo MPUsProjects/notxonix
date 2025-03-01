@@ -1,4 +1,3 @@
-import pygame as pg
 from assets.gamelib.scripts import *
 
 # базовые
