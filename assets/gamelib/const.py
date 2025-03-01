@@ -19,13 +19,9 @@ KLEFT = pg.K_LEFT
 KRIGHT = pg.K_RIGHT
 
 # textures
-FIELD = load_field_textures()
-WALLS = load_wall_textures()
 BALLS = load_ball_textures()
-PLAYERS = load_player_textures()
-BG = load_bg_textures()
-DECO = load_deco_textures()
 MISC = load_misc_textures()
+BGTEX = load_bg_textures()
 
 # deco
 ARR = MISC['arrow']

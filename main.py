@@ -28,10 +28,10 @@ def loading_screen():
     """Возможно, обтянутый кожей живой человек и не машина никогда его не увидит - слишком мало время загрузки"""
 
     # Загружаем спрайты, звуки и прочее, чтобы во время игры был минимум файловой работы
-    global scr, FIELDTEXTURES, WALLTEXTURES, BALLTEXTURES, PLAYERTEXTURES, BGTEXTURES, DECOTEXTURES, GAMEBG
+    global scr, FIELDTEXTURES, WALLTEXTURES, BALLTEXTURES, PLAYERTEXTURES, BGTEXTURES, DECOTEXTURES
 
     # Сделаем пользователю картинку загрузки, чтобы не беспокоился
-    scr.blit(pg.image.load('assets/textures/background/loading_screen1.png'), (0, 0))
+    scr.blit(BGTEX['loading_screen1'], (0, 0))
     pg.display.update()
 
     # Загрузка текстур разных видов
@@ -44,9 +44,6 @@ def loading_screen():
 
     # Загрузка звуков разных видов (пока их нет :/ )
 
-    # Отрисовка фона экрана игры
-
-
 
 def main_screen():
     global clock, scr, running, scrnow
@@ -54,7 +51,7 @@ def main_screen():
     # прочая настройка для экрана
     bg_coord = 0
     # bg = pg.image.load('assets/textures/background/background_menu_movable.jpg')
-    bg = BG['menunegotovo']
+    bg = BGTEXTURES['menunegotovo']
     # bg = pg.image.load('assets/textures/background/loading_screen1.png')
 
     while running and scrnow == MAINSCR:
@@ -101,29 +98,14 @@ def main_screen():
 
 
 def game_screen():
-    global scr, scrnow, clock, running
-
-    while running and scrnow == GAMESCR:
-        pg.display.update()
-        for event in pg.event.get():
-            # проверка на закрытие
-            if event.type == pg.QUIT:
-                shutdown()
-                break
-            # управление кнопками
-            elif event.type == pg.KEYDOWN:
-                if event.key == KUP:
-                    pass
-                elif event.key == KDOWN:
-                    pass
-                elif event.key == KLEFT:
-                    pass
-                elif event.key == KRIGHT:
-                    pass
+    print('I AM SORRY BOY')
 
 
 def skin_changer():
     global clock, scr, running, scrnow, skins_onacc
+    pg.init()
+    clock = pg.time.Clock()
+    pg.display.set_caption(f'{APPNAME} {APPVER}')
     current_skin_index = int(gamedb['Skin'])
     print(current_skin_index)
     # Главный игровой цикл
@@ -155,7 +137,7 @@ def skin_changer():
                     gamedb['Skin'] = str(current_skin_index)
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
-        bg = BG['back']
+        bg = BGTEXTURES['back']
         bg = pg.transform.rotozoom(bg, 0, 1.4)
 
         # Отображение текущего скина
@@ -183,6 +165,8 @@ def skin_changer():
 
 def shop_screen():
     global clock, scr, running, scrnow, skins_onacc, money
+
+    pg.display.set_caption(f'{APPNAME} {APPVER}')
 
     # Главный игровой цикл
     while running and scrnow == SHOPSCR:
@@ -229,7 +213,7 @@ def shop_screen():
 
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
-        bg = BG['back']
+        bg = BGTEXTURES['back']
         bg = pg.transform.rotozoom(bg, 0, 1.4)
 
         # Отображение текущего скина
@@ -255,6 +239,9 @@ def shop_screen():
 ''' Окно подтверждения покупки, выйдет в 1.1(
 def buy_screen():
     global clock, scr
+    pg.init()
+    clock = pg.time.Clock()
+    pg.display.set_caption(f'{APPNAME} {APPVER}')
     while running and scrnow == SHOPSCR:
         for event in pg.event.get():
             if event.type == pg.MOUSEBUTTONUP:
@@ -280,9 +267,10 @@ def buy_screen():
 pg.init()
 scr = pg.display.set_mode((640, 360))
 pg.display.set_caption(f'{APPNAME} {APPVER}')
+pg.display.set_icon(pg.transform.rotozoom(BALLS['ballpepsi'], 0, 100))
 running = True
 scrnow = MAINSCR
-GAMEBG = pg.Surface(scr.get_size())
+ball1 = BALLS['ball1']
 
 # настройка
 clock = pg.time.Clock()

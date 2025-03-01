@@ -6,6 +6,8 @@ from assets.gamelib.const import *
 WALLS = load_wall_textures()
 FIELD = load_field_textures()
 pg.init()
+WALLS = load_wall_textures()
+FIELD = load_field_textures()
 scr = pg.display.set_mode((640, 360))
 x = 0
 y = 0
