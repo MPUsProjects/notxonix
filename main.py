@@ -84,6 +84,17 @@ def main_screen():
                     pg.quit()
                     running = False
                     break
+            if event.type == pg.MOUSEBUTTONUP:
+                x = event.pos[0]
+                y = event.pos[1]
+                if 255 < x < 390 and 90 < y < 150:
+                    game_screen()
+                elif 255 < x < 390 and 160 < y < 210:
+                    scrnow = SKINSCR
+                elif 255 < x < 390 and 220 < y < 270:
+                    shutdown()
+                    running = False
+                    break
 
 
 def game_screen():
