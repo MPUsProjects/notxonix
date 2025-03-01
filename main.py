@@ -7,7 +7,6 @@ import sys
 
 FIELDTEXTURES = {}
 WALLTEXTURES = {}
-BALLTEXTURES = {}
 PLAYERTEXTURES = {}
 BGTEXTURES = {}
 DECOTEXTURES = {}
@@ -28,7 +27,7 @@ def loading_screen():
     """Возможно, обтянутый кожей живой человек и не машина никогда его не увидит - слишком мало время загрузки"""
 
     # Загружаем спрайты, звуки и прочее, чтобы во время игры был минимум файловой работы
-    global scr, FIELDTEXTURES, WALLTEXTURES, BALLTEXTURES, PLAYERTEXTURES, BGTEXTURES, DECOTEXTURES
+    global scr, FIELDTEXTURES, WALLTEXTURES, PLAYERTEXTURES, BGTEXTURES, DECOTEXTURES
 
     # Сделаем пользователю картинку загрузки, чтобы не беспокоился
     scr.blit(BGTEX['loading_screen1'], (0, 0))
@@ -37,7 +36,6 @@ def loading_screen():
     # Загрузка текстур разных видов
     FIELDTEXTURES = load_field_textures()
     WALLTEXTURES = load_wall_textures()
-    BALLTEXTURES = load_ball_textures()
     PLAYERTEXTURES = load_player_textures()
     BGTEXTURES = load_bg_textures()
     DECOTEXTURES = load_deco_textures()
