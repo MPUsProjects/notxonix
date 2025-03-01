@@ -12,6 +12,12 @@ SKINSCR = 4
 BUYSCR = 5
 LDBFILE = 'data/playerdata.db'
 
+# controls (управление)
+KUP = pg.K_UP
+KDOWN = pg.K_DOWN
+KLEFT = pg.K_LEFT
+KRIGHT = pg.K_RIGHT
+
 # textures
 FIELD = load_field_textures()
 WALLS = load_wall_textures()
@@ -41,12 +47,6 @@ MON = pg.transform.rotozoom(MONEY, 0, 1.2)  # money resized
 GAME = FONT.render("ИГРАТЬ", True, (255, 255, 255))
 LEAVE = FONT.render("ВЫЙТИ", True, (255, 255, 255))
 MT1 = FONT.render("МАГАЗИН", True, (255, 255, 255))
-
-# controls (управление)
-KUP = pg.K_UP
-KDOWN = pg.K_DOWN
-KLEFT = pg.K_LEFT
-KRIGHT = pg.K_RIGHT
 
 # prices
 FREE = 0
