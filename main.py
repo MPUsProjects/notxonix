@@ -3,6 +3,7 @@ from assets.gamelib.const import *
 from assets.gamelib.scripts import *
 from assets.gamelib.objects import *
 import sys
+from random import randint
 
 
 FIELDTEXTURES = {}
@@ -24,6 +25,11 @@ def shutdown():
     pg.quit()
     ldb.save(gamedb)
     ldb.close()
+
+
+def death_func():
+    global ballamount, scrnow
+    scrnow = MAINSCR
 
 
 def loading_screen():
@@ -109,14 +115,31 @@ def main_screen():
 
 
 def game_screen():
-    print('тут пока нет, приноси свои извинения')
-    global scr, scrnow, clock, running
+    global scr, scrnow, clock, running, gameboard, horwalls, vertwalls, ballgroup
+    board = gameboard
+    board.set_standart_board()
+    bboard = board.board
+    ballamount = randint(1, 4)
+    for _ in range(ballamount):
+        a = Ball(BALLTEXTURES['ball2'], (randint(81, 500), randint(81, 240)), ballgroup, horwalls,
+                 vertwalls, board)
+        a.deathfunc = death_func
 
     while running and scrnow == GAMESCR:
         # тех часть
         scr.blit(BGTEXTURES['gamebg'], (0, 0))
 
+        # апдейты
+        board.draw(scr)
+        ballgroup.draw(scr)
+        ballgroup.update()
+
         # основная часть
+        fieldamount = sum(map(lambda y: sum(map(lambda x: 1 if bboard[y][x].get_cell_state() == CELLFIELD else 0,
+                                                range(len(bboard[0])))), range(len(bboard))))
+        if fieldamount >= len(bboard) * len(bboard[0]) * 0.75:
+            gamedb['Money'] = str(int(gamedb['Money']) + ballamount)
+            scrnow = MAINSCR
 
         # тех часть
         pg.display.update()
@@ -128,13 +151,16 @@ def game_screen():
             # управление кнопками
             elif event.type == pg.KEYDOWN:
                 if event.key == KUP:
-                    pass
+                    board.move_player(-1, 0)
                 elif event.key == KDOWN:
-                    pass
+                    board.move_player(1, 0)
                 elif event.key == KLEFT:
-                    pass
+                    board.move_player(0, -1)
                 elif event.key == KRIGHT:
-                    pass
+                    board.move_player(0, 1)
+    horwalls.empty()
+    vertwalls.empty()
+    ballgroup.empty()
 
 
 def skin_changer():
@@ -313,6 +339,9 @@ scrnow = MAINSCR
 clock = pg.time.Clock()
 ldb = LocalDB(LDBFILE)
 gamedb = ldb.get_all()
+
+ballamount = 0
+
 '''gamedb['WB'] = '0'
 gamedb['LB'] = '0'
 gamedb["MexB"] = '0'
@@ -329,12 +358,22 @@ if gamedb['MexB'] == '1':
     skins_onacc.append(MEXICAN_SKIN)
 if gamedb['ShrekB'] == '1':
     skins_onacc.append(SHREK_SKIN)
+
+# игровой цикл
+loading_screen()  # загрузим ресурсы игры
+
+horwalls = pg.sprite.Group()
+vertwalls = pg.sprite.Group()
+ballgroup = pg.sprite.Group()
+gameboard = Board((41, 41), (7, 14), 40, FIELDTEXTURES['captured'], FIELDTEXTURES['capture'],
+                  FIELDTEXTURES['ballfield'], PLAYERTEXTURES['main_hero'], ballgroup, horwalls, vertwalls)
+gameboard.deathfunc = death_func
+
 skins_pic = [pg.transform.scale(pg.image.load(f'assets/textures/player/{skin_file}'),
                                     (int(100 * 3), int(100 * 3))) for skin_file in skins_onacc]
 skins_pic1 = [pg.transform.scale(pg.image.load(f'assets/textures/player/{skin_file}'),
                                    (int(100 * 3), int(100 * 3))) for skin_file in skins_ingame]
-# игровой цикл
-loading_screen()  # загрузим ресурсы игры
+
 # сам цикл
 while running:
     if scrnow == MAINSCR:

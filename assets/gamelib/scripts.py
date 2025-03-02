@@ -26,11 +26,11 @@ def load_wall_textures():
 
 
 def load_ball_textures():
-    return load_textures('ball')
+    return load_textures('ball', 40)
 
 
 def load_player_textures():
-    return load_textures('player')
+    return load_textures('player', 40)
 
 
 def load_bg_textures():

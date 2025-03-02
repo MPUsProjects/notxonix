@@ -4,7 +4,6 @@ from firebase_admin import db
 import assets.gamelib.const
 from sqlite3 import connect as sqlconnect
 from assets.gamelib.const import *
-import random
 
 CELLVOID = 1  # поле шарика
 CELLFIELD = 2  # поле игрока
@@ -34,13 +33,15 @@ class Cell:
 
 
 # класс доски (технические классы)
-def board_standart_death_func():
+def standart_death_func():
     print('you lost')
 
 
 class Board:
     def __init__(self, origin: tuple[int, int], size: tuple[int, int], cellsize: int, field_texture: pg.Surface,
-                 trail_texture: pg.Surface, void_texture: pg.Surface, ballspritegroup: pg.sprite.Group):
+                 trail_texture: pg.Surface, void_texture: pg.Surface, player_texture: pg.Surface,
+                 ballspritegroup: pg.sprite.Group, horwallspritegroup: pg.sprite.Group,
+                 vertwallspritegroup: pg.sprite.Group):
         self.field_texture = field_texture
         self.trail_texture = trail_texture
         self.void_texture = void_texture
@@ -50,21 +51,22 @@ class Board:
         self.origin = origin
 
         self.playertexture = pg.Surface((40, 40))
-        self.playertexture.fill('2bb552')
+        self.playertexture.fill((0, 255, 0))
+        self.playertexture = player_texture
         self.playerpos = (0, 0)
-        self.deathfunc = board_standart_death_func
+        self.deathfunc = standart_death_func
 
         self.ballgroup = ballspritegroup
+        self.horwallgroup = horwallspritegroup
+        self.vertwallgroup = vertwallspritegroup
 
-    def __create_cell(self, coords: tuple[int, int], cellcode: str):
-        if cellcode == assets.gamelib.const.__CELLPLAYER:
-            return Cell(self, coords, CELLFIELD, True)
-        if cellcode == assets.gamelib.const.__CELLVOID:
+    def __create_cell(self, coords: tuple[int, int], cellcode: str = CELLVOID):
+        if cellcode == CELLVOID:
             return Cell(self, coords, CELLVOID)
-        if cellcode == assets.gamelib.const.__CELLFIELD:
+        if cellcode == CELLFIELD:
             return Cell(self, coords, CELLFIELD)
 
-    def __set_standart_board(self):
+    def set_standart_board(self):
         self.board = list(map(lambda y: list(map(lambda x: self.__create_cell((y, x)), range(14))), range(7)))
         for i in range(14):
             self.board[0][i].set_cell_state(CELLFIELD)
@@ -73,6 +75,7 @@ class Board:
             self.board[j][0].set_cell_state(CELLFIELD)
             self.board[j][-1].set_cell_state(CELLFIELD)
         self.board[0][0].set_player_state(True)
+        self.new_walls()
 
     def draw(self, scr: pg.Surface):
         for i in range(self.bsize[1]):
@@ -86,6 +89,9 @@ class Board:
                 elif self.board[j][i].get_cell_state() == CELLVOID:
                     scr.blit(self.void_texture, (self.origin[0] + self.cellsize * i,
                                                  self.origin[1] + self.cellsize * j))
+                if self.board[j][i].is_player():
+                    scr.blit(self.playertexture, (self.origin[0] + self.cellsize * i,
+                                                  self.origin[1] + self.cellsize * j))
 
     def on_board_coords(self, coords: tuple[int, int]):
         '''Возвращает координаты точки относительно клеток поля Board в виде (№строки, №столбца)'''
@@ -93,6 +99,12 @@ class Board:
                 self.origin[0] <= coords[1] < self.origin[1] + self.cellsize * self.bsize[0]):
             return ((coords[1] - self.origin[1]) // self.cellsize, (coords[0] - self.origin[0]) // self.cellsize)
         return None
+
+    def on_screen_coords(self, bcoords: tuple[int, int]):
+        '''bcoords: tuple[row, col]'''
+        x = bcoords[1] * self.cellsize + self.origin[0]
+        y = bcoords[0] * self.cellsize + self.origin[1]
+        return (x, y)
 
     def set_player_pos(self, newpos: tuple[int, int]):
         '''newpos: tuple(row, col)'''
@@ -103,7 +115,12 @@ class Board:
                 self.deathfunc()
             elif (self.board[newpos[0]][newpos[1]].get_cell_state() == CELLFIELD and
                   self.board[self.playerpos[0]][self.playerpos[1]].get_cell_state() == CELLTRAIL):
-                pass
+                self.fill_new_territory()
+                for row in self.board:
+                    for cell in row:
+                        if cell.get_cell_state() == CELLTRAIL:
+                            cell.set_cell_state(CELLFIELD)
+                self.new_walls()
 
             self.board[self.playerpos[0]][self.playerpos[1]].set_player_state(False)
             self.board[newpos[0]][newpos[1]].set_player_state(True)
@@ -114,8 +131,83 @@ class Board:
         -1 <= int(col) <= 1'''
         self.set_player_pos((self.playerpos[0] + row, self.playerpos[1] + col))
 
+    def new_walls(self):
+        self.horwallgroup.empty()
+        self.vertwallgroup.empty()
+        for j in range(len(self.board)):
+            for i in range(len(self.board[0])):
+                if self.board[j][i].get_cell_state() != CELLFIELD:
+                    continue
+
+                if j >= 1 and self.board[j - 1][i].get_cell_state() == CELLVOID:
+                    pos = self.on_screen_coords((j, i))
+                    Wall(WALLHOR, pos, self.horwallgroup)
+                if j < len(self.board) - 1 and self.board[j + 1][i].get_cell_state() == CELLVOID:
+                    pos = self.on_screen_coords((j, i))
+                    Wall(WALLHOR, (pos[0], pos[1] + self.cellsize - 1), self.horwallgroup)
+                if i >= 1 and self.board[j][i - 1].get_cell_state() == CELLVOID:
+                    pos = self.on_screen_coords((j, i))
+                    Wall(WALLVERT, pos, self.vertwallgroup)
+                if i < len(self.board[0]) - 1 and self.board[j][i + 1].get_cell_state() == CELLVOID:
+                    pos = self.on_screen_coords((j, i))
+                    Wall(WALLVERT, (pos[0] + self.cellsize - 1, pos[1]), self.vertwallgroup)
+
     def fill_new_territory(self):
         pass
+
+
+# класс стены
+
+
+WALLVERT = 1
+WALLHOR = 2
+
+
+class Wall(pg.sprite.Sprite):
+    def __init__(self, orientation, position: tuple[int, int], wallgroup: pg.sprite.Group):
+        super().__init__(wallgroup)
+        self.orientation = orientation
+        self.image = pg.Surface((40, 1) if orientation == WALLHOR else (1, 40))
+        self.rect = self.image.get_rect()
+        self.rect.x = position[0]
+        self.rect.y = position[1]
+
+    def get_orientation(self):
+        return self.orientation
+
+
+class Ball(pg.sprite.Sprite):
+    def __init__(self, balltexture: pg.Surface, pos: tuple[int, int], ballspritegroup: pg.sprite.Group,
+                 horwallspritegroup: pg.sprite.Group, vertwallspritegroup: pg.sprite.Group, board):
+        super().__init__(ballspritegroup)
+        self.image = balltexture
+        self.horwallgroup = horwallspritegroup
+        self.vertwallgroup = vertwallspritegroup
+        self.rect = self.image.get_rect()
+        self.rect.x = pos[0]
+        self.rect.y = pos[1]
+        self.deathfunc = standart_death_func
+        self.board = board
+
+        self.vx = 1
+        self.vy = 1
+        self.movetimer = 0
+
+    def update(self):
+        if pg.sprite.spritecollideany(self, self.horwallgroup):
+            self.vy *= -1
+        if pg.sprite.spritecollideany(self, self.vertwallgroup):
+            self.vx *= -1
+
+        self.movetimer += 1
+        if self.movetimer >= 3:
+            self.movetimer = 0
+            self.rect.x += self.vx
+            self.rect.y += self.vy
+
+        bcoords = self.board.on_board_coords((self.rect.x + 20, self.rect.y + 20))
+        if self.board.board[bcoords[0]][bcoords[1]].get_cell_state() == CELLTRAIL:
+            self.deathfunc
 
 
 "self.image = skin_check(gamedb['Skin'])"  # для отображения картинки скина

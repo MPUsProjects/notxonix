@@ -2,7 +2,7 @@ from assets.gamelib.scripts import *
 
 # базовые
 APPNAME = 'Notxonix'
-APPVER = 'indev-20250301'
+APPVER = '1.0'
 
 # технические
 MAINSCR = 1
