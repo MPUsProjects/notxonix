@@ -121,6 +121,7 @@ def game_screen():
     board.set_standart_board()
     bboard = board.board
     ballamount = randint(1, 4)
+    board.spawn_player()
     for _ in range(ballamount):
         a = Ball(BALLTEXTURES['ball2'], (randint(81, 500), randint(81, 240)), ballgroup, horwalls,
                  vertwalls, board)
@@ -186,7 +187,7 @@ def game_over_screen():
         scr.blit(bg, (0, 0))
         scr.blit(OVER, (150, 50))
         if STATUS == 0:
-            scr.blit(LOSTEX, (250, 100))
+            scr.blit(LOSTEX, (200, 100))
         elif STATUS == 1:
             scr.blit(WINTEX, (250, 100))
         scr.blit(BTN, (215, 70))

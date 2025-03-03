@@ -11,7 +11,7 @@ SHOPSCR = 3
 SKINSCR = 4
 BUYSCR = 5
 GAMEOVERSCR = 6
-STATUS = 1
+STATUS = 2
 LDBFILE = 'data/playerdata.db'
 
 # controls (управление)

@@ -34,7 +34,8 @@ class Cell:
 
 # класс доски (технические классы)
 def standart_death_func():
-    print('you lost')
+    global STATUS
+    STATUS = 0
 
 
 class Board:
@@ -55,7 +56,6 @@ class Board:
         self.playertexture = player_texture
         self.deathfunc = standart_death_func
         self.playerpos = (0, 0)
-
         self.ballgroup = ballspritegroup
         self.horwallgroup = horwallspritegroup
         self.vertwallgroup = vertwallspritegroup
@@ -189,7 +189,6 @@ class Ball(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = pos[0]
         self.rect.y = pos[1]
-        self.deathfunc = standart_death_func
         self.board = board
 
         self.vx = 1
@@ -209,8 +208,8 @@ class Ball(pg.sprite.Sprite):
             self.rect.y += self.vy
 
         bcoords = self.board.on_board_coords((self.rect.x + 20, self.rect.y + 20))
-        if self.board.board[bcoords[0]][bcoords[1]].get_cell_state() == CELLTRAIL:
-            self.deathfunc
+        if self.board.board[bcoords[0]][bcoords[1]].is_player():
+            standart_death_func()
 
 
 "self.image = skin_check(gamedb['Skin'])"  # для отображения картинки скина
