@@ -28,8 +28,9 @@ def shutdown():
 
 
 def death_func():
-    global ballamount, scrnow
-    scrnow = MAINSCR
+    global ballamount, scrnow, STATUS
+    scrnow = GAMEOVERSCR
+    STATUS = 0
 
 
 def loading_screen():
@@ -115,7 +116,7 @@ def main_screen():
 
 
 def game_screen():
-    global scr, scrnow, clock, running, gameboard, horwalls, vertwalls, ballgroup
+    global scr, scrnow, clock, running, gameboard, horwalls, vertwalls, ballgroup, STATUS
     board = gameboard
     board.set_standart_board()
     bboard = board.board
@@ -139,7 +140,9 @@ def game_screen():
                                                 range(len(bboard[0])))), range(len(bboard))))
         if fieldamount >= len(bboard) * len(bboard[0]) * 0.75:
             gamedb['Money'] = str(int(gamedb['Money']) + ballamount)
-            scrnow = MAINSCR
+            scrnow = GAMEOVERSCR
+            board.spawn_player()
+            STATUS = 1
 
         # тех часть
         pg.display.update()
@@ -161,6 +164,37 @@ def game_screen():
     horwalls.empty()
     vertwalls.empty()
     ballgroup.empty()
+
+
+def game_over_screen():
+    global clock, scr, running, scrnow, STATUS
+    pg.display.update()
+    while running and scrnow == GAMEOVERSCR:
+        scr.fill((255, 255, 255))
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                shutdown()
+                break
+            if event.type == pg.MOUSEBUTTONUP:
+                x = event.pos[0]
+                y = event.pos[1]
+                if 260 <= x <= 420 and 165 <= y <= 210:
+                    scrnow = MAINSCR
+        # фон
+        bg = BGTEXTURES['back']
+        bg = pg.transform.rotozoom(bg, 0, 1.4)
+        scr.blit(bg, (0, 0))
+        scr.blit(OVER, (150, 50))
+        if STATUS == 0:
+            scr.blit(LOSTEX, (250, 100))
+        elif STATUS == 1:
+            scr.blit(WINTEX, (250, 100))
+        scr.blit(BTN, (215, 70))
+        scr.blit(LEAVE, (294, 180))
+        pg.display.flip()
+
+        # Ограничение FPS
+        pg.time.Clock().tick(30)
 
 
 def skin_changer():
@@ -366,7 +400,8 @@ horwalls = pg.sprite.Group()
 vertwalls = pg.sprite.Group()
 ballgroup = pg.sprite.Group()
 gameboard = Board((41, 41), (7, 14), 40, FIELDTEXTURES['captured'], FIELDTEXTURES['capture'],
-                  FIELDTEXTURES['ballfield'], PLAYERTEXTURES['main_hero'], ballgroup, horwalls, vertwalls)
+                  FIELDTEXTURES['ballfield'], PLAYERTEXTURES[skin_check(gamedb['Skin'])],
+                  ballgroup, horwalls, vertwalls)
 gameboard.deathfunc = death_func
 
 skins_pic = [pg.transform.scale(pg.image.load(f'assets/textures/player/{skin_file}'),
@@ -384,3 +419,5 @@ while running:
         skin_changer()
     elif scrnow == SHOPSCR:
         shop_screen()
+    elif scrnow == GAMEOVERSCR:
+        game_over_screen()

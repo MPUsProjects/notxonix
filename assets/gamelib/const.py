@@ -10,6 +10,8 @@ GAMESCR = 2
 SHOPSCR = 3
 SKINSCR = 4
 BUYSCR = 5
+GAMEOVERSCR = 6
+STATUS = 1
 LDBFILE = 'data/playerdata.db'
 
 # controls (управление)
@@ -43,6 +45,9 @@ MON = pg.transform.rotozoom(MONEY, 0, 1.2)  # money resized
 GAME = FONT.render("ИГРАТЬ", True, (255, 255, 255))
 LEAVE = FONT.render("ВЫЙТИ", True, (255, 255, 255))
 MT1 = FONT.render("МАГАЗИН", True, (255, 255, 255))
+OVER = TITLE.render("ИГРА ОКОНЧЕНА", True, (255, 255, 255))
+WINTEX = TITLE.render("ПОБЕДА!", True, (255, 255, 255))
+LOSTEX = TITLE.render("ПОРАЖЕНИЕ!", True, (255, 255, 255))
 
 # prices
 FREE = 0

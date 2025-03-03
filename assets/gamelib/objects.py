@@ -53,12 +53,15 @@ class Board:
         self.playertexture = pg.Surface((40, 40))
         self.playertexture.fill((0, 255, 0))
         self.playertexture = player_texture
-        self.playerpos = (0, 0)
         self.deathfunc = standart_death_func
+        self.playerpos = (0, 0)
 
         self.ballgroup = ballspritegroup
         self.horwallgroup = horwallspritegroup
         self.vertwallgroup = vertwallspritegroup
+
+    def spawn_player(self):
+        self.playerpos = (0, 0)
 
     def __create_cell(self, coords: tuple[int, int], cellcode: str = CELLVOID):
         if cellcode == CELLVOID:
@@ -97,7 +100,7 @@ class Board:
         '''Возвращает координаты точки относительно клеток поля Board в виде (№строки, №столбца)'''
         if (self.origin[0] <= coords[0] < self.origin[0] + self.cellsize * self.bsize[1] and
                 self.origin[0] <= coords[1] < self.origin[1] + self.cellsize * self.bsize[0]):
-            return ((coords[1] - self.origin[1]) // self.cellsize, (coords[0] - self.origin[0]) // self.cellsize)
+            return (coords[1] - self.origin[1]) // self.cellsize, (coords[0] - self.origin[0]) // self.cellsize
         return None
 
     def on_screen_coords(self, bcoords: tuple[int, int]):
@@ -289,13 +292,15 @@ class CloudDB:
 
 def skin_check(num):
     if num == '1':
-        return assets.gamelib.const.LOKI_SKIN
+        return 'loki'
     elif num == '2':
-        return assets.gamelib.const.WARRIOR_SKIN
+        return 'warrior'
     elif num == '0':
-        return assets.gamelib.const.MINER_SKIN
+        return 'main_hero'
     elif num == '3':
-        return assets.gamelib.const.MEXICAN_SKIN
+        return 'mexicanes'
+    elif num == '4':
+        return 'shrek'
 
 
 ldb = LocalDB(LDBFILE)
