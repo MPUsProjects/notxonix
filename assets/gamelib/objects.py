@@ -208,8 +208,8 @@ class Ball(pg.sprite.Sprite):
             self.rect.y += self.vy
 
         bcoords = self.board.on_board_coords((self.rect.x + 20, self.rect.y + 20))
-        if self.board.board[bcoords[0]][bcoords[1]].is_player():
-            standart_death_func()
+        '''if self.board.board[bcoords[0]][bcoords[1]].is_player():
+            standart_death_func()'''
 
 
 "self.image = skin_check(gamedb['Skin'])"  # для отображения картинки скина
@@ -290,15 +290,15 @@ class CloudDB:
 
 
 def skin_check(num):
-    if num == '1':
+    if gamedb['Skin'] == gamedb['Loki']:
         return 'loki'
-    elif num == '2':
+    elif gamedb['Skin'] == gamedb['Warrior']:
         return 'warrior'
-    elif num == '0':
+    elif gamedb['Skin'] == gamedb['Main']:
         return 'main_hero'
-    elif num == '3':
+    elif gamedb['Skin'] == gamedb['Mexicanes']:
         return 'mexicanes'
-    elif num == '4':
+    elif gamedb['Skin'] == gamedb['Shrek']:
         return 'shrek'
 
 

@@ -98,8 +98,7 @@ def main_screen():
                 if event.key == pg.K_s:
                     scrnow = SKINSCR
                 if event.key == pg.K_ESCAPE:
-                    pg.quit()
-                    running = False
+                    shutdown()
                     break
             if event.type == pg.MOUSEBUTTONUP:
                 x = event.pos[0]
@@ -281,6 +280,8 @@ def shop_screen():
                             gamedb['Money'] = str(money)
                             skins_pic.append(pg.transform.scale(pg.image.load(f'assets/textures/player/loki.png'),
                                                                 (int(100 * 3), int(100 * 3))))
+                            gamedb['Loki'] = gamedb['SkinCount']
+                            gamedb['SkinCount'] = str(int(gamedb['SkinCount']) + 1)
                         else:
                             print("НЕДОСТАТОЧНО ДЕНЕГ")
                     elif gamedb['LB'] == '1' and gamedb["MexB"] == '0':
@@ -290,6 +291,8 @@ def shop_screen():
                             gamedb['Money'] = str(money)
                             skins_pic.append(pg.transform.scale(pg.image.load(f'assets/textures/player/mexicanes.png'),
                                                                 (int(100 * 3), int(100 * 3))))
+                            gamedb['Mexicanes'] = gamedb['SkinCount']
+                            gamedb['SkinCount'] = str(int(gamedb['SkinCount']) + 1)
                         else:
                             print("НЕДОСТАТОЧНО ДЕНЕГ")
                 if 300 <= cor[0] <= 490 and 70 <= cor[1] <= 360:
@@ -300,6 +303,8 @@ def shop_screen():
                             gamedb['Money'] = str(money)
                             skins_pic.append(pg.transform.scale(pg.image.load(f'assets/textures/player/warrior.png'),
                                                                 (int(100 * 3), int(100 * 3))))
+                            gamedb['Warrior'] = gamedb['SkinCount']
+                            gamedb['SkinCount'] = str(int(gamedb['SkinCount']) + 1)
                         else:
                             print("НЕДОСТАТОЧНО ДЕНЕГ")
                     elif gamedb['WB'] == '1' and gamedb["ShrekB"] == '0':
@@ -309,6 +314,8 @@ def shop_screen():
                             gamedb['Money'] = str(money)
                             skins_pic.append(pg.transform.scale(pg.image.load(f'assets/textures/player/shrek.png'),
                                                                 (int(100 * 3), int(100 * 3))))
+                            gamedb['Shrek'] = gamedb['SkinCount']
+                            gamedb['SkinCount'] = str(int(gamedb['SkinCount']) + 1)
                         else:
                             print("НЕДОСТАТОЧНО ДЕНЕГ")
 
@@ -383,17 +390,47 @@ gamedb["MexB"] = '0'
 gamedb["ShrekB"] = '0'
 gamedb['Money'] = '0'
 gamedb['Skin'] = '0'
-gamedb['Money'] = '100'''
+gamedb['Money'] = '100'
+gamedb['Main'] = '0'
+gamedb['Loki'] = ''
+gamedb['Warrior'] = ''
+gamedb['Mexicanes'] = ''
+gamedb['Shrek'] = ''
+gamedb['SkinCount'] = '1'
+'''
 money = int(gamedb['Money'])
-if gamedb['LB'] == '1':
+if gamedb['Loki'] == '1':
     skins_onacc.append(LOKI_SKIN)
-if gamedb['WB'] == '1':
+elif gamedb['Warrior'] == '1':
     skins_onacc.append(WARRIOR_SKIN)
-if gamedb['MexB'] == '1':
+elif gamedb['Mexicanes'] == '1':
     skins_onacc.append(MEXICAN_SKIN)
-if gamedb['ShrekB'] == '1':
+elif gamedb['Shrek'] == '1':
     skins_onacc.append(SHREK_SKIN)
-
+if gamedb['Loki'] == '2':
+    skins_onacc.append(LOKI_SKIN)
+elif gamedb['Warrior'] == '2':
+    skins_onacc.append(WARRIOR_SKIN)
+elif gamedb['Mexicanes'] == '2':
+    skins_onacc.append(MEXICAN_SKIN)
+elif gamedb['Shrek'] == '2':
+    skins_onacc.append(SHREK_SKIN)
+if gamedb['Loki'] == '3':
+    skins_onacc.append(LOKI_SKIN)
+elif gamedb['Warrior'] == '3':
+    skins_onacc.append(WARRIOR_SKIN)
+elif gamedb['Mexicanes'] == '3':
+    skins_onacc.append(MEXICAN_SKIN)
+elif gamedb['Shrek'] == '3':
+    skins_onacc.append(SHREK_SKIN)
+if gamedb['Loki'] == '4':
+    skins_onacc.append(LOKI_SKIN)
+elif gamedb['Warrior'] == '4':
+    skins_onacc.append(WARRIOR_SKIN)
+elif gamedb['Mexicanes'] == '4':
+    skins_onacc.append(MEXICAN_SKIN)
+elif gamedb['Shrek'] == '4':
+    skins_onacc.append(SHREK_SKIN)
 # игровой цикл
 loading_screen()  # загрузим ресурсы игры
 
