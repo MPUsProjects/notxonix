@@ -27,6 +27,13 @@ def shutdown():
     ldb.close()
 
 
+def small_shutdown():
+    global ldb, gamedb
+    ldb.save(gamedb)
+    ldb.close()
+    ldb = LocalDB(LDBFILE)
+
+
 def death_func():
     global ballamount, scrnow, STATUS
     scrnow = GAMEOVERSCR
@@ -115,8 +122,12 @@ def main_screen():
 
 
 def game_screen():
-    global scr, scrnow, clock, running, gameboard, horwalls, vertwalls, ballgroup, STATUS
-    board = gameboard
+    global scr, scrnow, clock, running, horwalls, vertwalls, ballgroup, STATUS
+    print(CURRENT_SKIN)
+    board = Board((41, 41), (7, 14), 40, FIELDTEXTURES['captured'], FIELDTEXTURES['capture'],
+                  FIELDTEXTURES['ballfield'], PLAYERTEXTURES[skin_check(CURRENT_SKIN)],
+                  ballgroup, horwalls, vertwalls)
+    board.deathfunc = death_func
     board.set_standart_board()
     bboard = board.board
     ballamount = randint(1, 4)
@@ -198,9 +209,9 @@ def game_over_screen():
 
 
 def skin_changer():
-    global clock, scr, running, scrnow, skins_onacc
+    global clock, scr, running, scrnow, skins_onacc, CURRENT_SKIN
     current_skin_index = int(gamedb['Skin'])
-    print(current_skin_index)
+    print(CURRENT_SKIN)
     # Главный игровой цикл
     while running and scrnow == SKINSCR:
         for event in pg.event.get():
@@ -211,30 +222,36 @@ def skin_changer():
                 if event.key == pg.K_RIGHT:
                     current_skin_index = (current_skin_index + 1) % len(skins_pic)  # Переключение на следующий скин
                     gamedb['Skin'] = str(current_skin_index)
+                    CURRENT_SKIN = str(current_skin_index)
                 elif event.key == pg.K_LEFT:
                     current_skin_index = (current_skin_index - 1) % len(skins_pic)  # Переключение на предыдущий скин
                     gamedb['Skin'] = str(current_skin_index)
+                    CURRENT_SKIN = str(current_skin_index)
                 elif event.key == pg.K_ESCAPE:
+                    small_shutdown()
                     scrnow = MAINSCR
             if event.type == pg.MOUSEBUTTONUP:
                 cor = event.pos
                 if cor[0] <= 60 and 20 <= cor[1] <= 40:
                     scrnow = MAINSCR
+                    small_shutdown()
                 if cor[0] >= 570 and 20 <= cor[1] <= 40:
                     scrnow = SHOPSCR
                 if 260 <= cor[0] <= 320 and 300 <= cor[1] <= 360:
                     current_skin_index = (current_skin_index - 1) % len(skins_pic)
                     gamedb['Skin'] = str(current_skin_index)  # Переключение на предыдущий скин
+                    CURRENT_SKIN = str(current_skin_index)
                 if 390 <= cor[0] <= 550 and 300 <= cor[1] <= 360:
                     current_skin_index = (current_skin_index + 1) % len(skins_pic)  # Переключение на следующий скин
                     gamedb['Skin'] = str(current_skin_index)
+                    CURRENT_SKIN = str(current_skin_index)
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
         bg = BGTEXTURES['back']
         bg = pg.transform.rotozoom(bg, 0, 1.4)
 
         # Отображение текущего скина
-        current_skin = skins_pic[current_skin_index]
+        current_skin = skins_pic[int(CURRENT_SKIN)]
         scr.blit(bg, (0, 0))
         if current_skin_index == 2:
             scr.blit(current_skin, (170, 50))
@@ -268,6 +285,7 @@ def shop_screen():
             if event.type == pg.KEYUP:
                 if event.key == pg.K_ESCAPE:
                     scrnow = MAINSCR
+                    small_shutdown()
             if event.type == pg.MOUSEBUTTONUP:
                 cor = event.pos
                 if cor[0] <= 60 and 20 <= cor[1] <= 40:
@@ -437,10 +455,7 @@ loading_screen()  # загрузим ресурсы игры
 horwalls = pg.sprite.Group()
 vertwalls = pg.sprite.Group()
 ballgroup = pg.sprite.Group()
-gameboard = Board((41, 41), (7, 14), 40, FIELDTEXTURES['captured'], FIELDTEXTURES['capture'],
-                  FIELDTEXTURES['ballfield'], PLAYERTEXTURES[skin_check(gamedb['Skin'])],
-                  ballgroup, horwalls, vertwalls)
-gameboard.deathfunc = death_func
+
 
 skins_pic = [pg.transform.scale(pg.image.load(f'assets/textures/player/{skin_file}'),
                                     (int(100 * 3), int(100 * 3))) for skin_file in skins_onacc]

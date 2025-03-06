@@ -69,6 +69,7 @@ MINER_SKIN = 'main_hero.png'
 WARRIOR_SKIN = 'warrior.png'
 MEXICAN_SKIN = 'mexicanes.png'
 SHREK_SKIN = 'shrek.png'
+CURRENT_SKIN = '0'
 
 # cellcodes
 __CELLPLAYER = '@'
