@@ -1,6 +1,4 @@
 import pygame as pg
-import firebase_admin as fba
-from firebase_admin import db
 import assets.gamelib.const
 from sqlite3 import connect as sqlconnect
 from assets.gamelib.const import *
@@ -269,6 +267,11 @@ class LocalDB:
         self.connectobj.close()
 
 
+"""
+ценный сердцу код через firebase
+
+import firebase_admin as fba
+from firebase_admin import db
 class CloudDB:
     def __init__(self):
         cred = fba.credentials.Certificate(assets.gamelib.const.DBCERT)
@@ -287,6 +290,7 @@ class CloudDB:
 
     def write_storage(self, name):
         pass
+"""
 
 
 def skin_check(num):
