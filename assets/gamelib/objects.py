@@ -1,7 +1,10 @@
 import pygame as pg
+
 import assets.gamelib.const
 from sqlite3 import connect as sqlconnect
 from assets.gamelib.const import *
+from requests import get as reqget, post as reqpost, RequestException
+
 
 CELLVOID = 1  # поле шарика
 CELLFIELD = 2  # поле игрока
@@ -265,6 +268,48 @@ class LocalDB:
 
     def close(self):
         self.connectobj.close()
+
+
+class CloudDB:
+    def __init__(self, api_address: str, api_key: str, localdb: LocalDB = None):
+        self.api_address = api_address
+        self.api_key = api_key
+        self.ldb = ldb
+
+    def get(self):
+        if reqget(self.api_address).ok:
+            cdb_username = 'USERNAME'  # ВСТАВИТЬ СЮДА ИМЯ ПОЛЬЗОВАТЕЛЯ ИЗ LDB
+            json_request = {'api_key': self.api_key,
+                            'game_id': CDB_GAME_ID,
+                            'username': cdb_username}
+            try:
+                res = reqget(self.api_address, json=json_request).json()
+                return res
+            except RequestException:
+                return None
+        else:
+            return None
+
+    def save(self, data):
+        if reqget(self.api_address).ok:
+            cdb_username = 'USERNAME'  # ВСТАВИТЬ СЮДА ИМЯ ПОЛЬЗОВАТЕЛЯ ИЗ LDB
+            json_request = {'api_key': self.api_key,
+                            'game_id': CDB_GAME_ID,
+                            'username': cdb_username,
+                            'data': data}
+            reqpost(self.api_address, json=json_request)
+            return True
+        else:
+            print('something went wrong')
+            return False
+
+    def get_to_ldb(self):
+        if self.ldb is not None:
+            pass
+
+    def save_from_ldb(self):
+        if self.ldb is not None:
+            pass
 
 
 """

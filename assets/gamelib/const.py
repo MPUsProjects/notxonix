@@ -14,6 +14,11 @@ GAMEOVERSCR = 6
 STATUS = 2
 LDBFILE = 'data/playerdata.db'
 
+# технические (для CloudDB)
+CDB_URL = '127.0.0.1/api'
+CDB_API_KEY = 'very secret key yay'
+CDB_GAME_ID = 'notxonix'
+
 # controls (управление)
 KUP = pg.K_UP
 KDOWN = pg.K_DOWN
