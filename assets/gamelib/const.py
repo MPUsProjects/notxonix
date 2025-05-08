@@ -11,10 +11,11 @@ SHOPSCR = 3
 SKINSCR = 4
 BUYSCR = 5
 GAMEOVERSCR = 6
+ACCSCR = 7 # новая строка
 STATUS = 2
 LDBFILE = 'data/playerdata.db'
 
-# технические (для CloudDB)
+# технические (для CloudDB) (НОВЫЕ 3 СТРОКИ)
 CDB_URL = '127.0.0.1/api'
 CDB_API_KEY = 'very secret key yay'
 CDB_GAME_ID = 'notxonix'
@@ -53,6 +54,12 @@ MT1 = FONT.render("МАГАЗИН", True, (255, 255, 255))
 OVER = TITLE.render("ИГРА ОКОНЧЕНА", True, (255, 255, 255))
 WINTEX = TITLE.render("ПОБЕДА!", True, (255, 255, 255))
 LOSTEX = TITLE.render("ПОРАЖЕНИЕ!", True, (255, 255, 255))
+# НАЧАЛО НОВОГО КОДА
+AC = TITLE.render("@", True, (255, 255, 255))
+LOAD = FONT.render("ЗАГРУЗИТЬ", True, (255, 255, 255))
+SAVE = FONT.render("СОХРАНИТЬ", True, (255, 255, 255))
+SET = FONT.render("НАСТРОЙКИ", True, (255, 255, 255))
+# КОНЕЦ
 
 # prices
 FREE = 0

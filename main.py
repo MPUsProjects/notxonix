@@ -95,6 +95,11 @@ def main_screen():
         scr.blit(GAME, (280, 110))
         scr.blit(MT1, (265, 170))
         scr.blit(LEAVE, (280, 230))
+        # НОВЫЙ КОДДД
+        scr.blit(BTN, (-156, 203))
+        scr.blit(AC, (0, 300))
+        scr.blit(LEAVE, (280, 230))
+        # КОНЕЦ
         # технический блок
         pg.display.update()
         for event in pg.event.get():
@@ -115,6 +120,9 @@ def main_screen():
                     break
                 elif 255 < x < 390 and 160 < y < 210:
                     scrnow = SKINSCR
+                elif 0 < x < 50 and 300 < y < 340: # НОВЫЕ 3 СТРОКИ
+                    scrnow = ACCSCR
+                    break
                 elif 255 < x < 390 and 220 < y < 270:
                     shutdown()
                     running = False
@@ -364,6 +372,50 @@ def shop_screen():
         pg.time.Clock().tick(30)
 
 
+# НАЧАЛО НОВОГО КОДА
+def accounts_screen():
+    global clock, scr, running, scrnow
+    while running and scrnow == ACCSCR:
+        events = pg.event.get()
+        for event in events:
+            if event.type == pg.QUIT:
+                shutdown()
+                break
+            if event.type == pg.KEYUP:
+                if event.key == pg.K_ESCAPE:
+                    scrnow = MAINSCR
+                    break
+            if event.type == pg.MOUSEBUTTONUP:
+                cor = event.pos
+                if cor[0] <= 60 and 20 <= cor[1] <= 40:
+                    scrnow = MAINSCR
+                    break
+                if 260 <= cor[0] <= 400 and 220 <= cor[1] <= 270:
+                    if gamedb['logged_in'] == '1':
+                        gamedb['logged_in'] = '0'
+                # Отображение фона
+        scr.fill((255, 255, 255))  # Белый фон
+        bg = BGTEXTURES['back']
+        bg = pg.transform.rotozoom(bg, 0, 1.4)
+        scr.blit(bg, (0, 0))
+        scr.blit(BACK, (0, 0))
+        scr.blit(BF, (60, 21))
+        if gamedb['logged_in'] == '1':
+            scr.blit(BTN, (200, 0))
+            scr.blit(BTN, (200, 60))
+            scr.blit(BTN, (200, 120))
+            scr.blit(LOAD, (254, 110))
+            scr.blit(SAVE, (250, 170))
+            scr.blit(LEAVE, (280, 230))
+        elif gamedb['logged_in'] == '0':
+            pass
+       # Обновление дисплея
+        pg.display.flip()
+
+        # Ограничение FPS
+        pg.time.Clock().tick(30)
+
+
 ''' Окно подтверждения покупки, выйдет в 1.1(
 def buy_screen():
     global clock, scr
@@ -387,7 +439,7 @@ def buy_screen():
         # Ограничение FPS
         pg.time.Clock().tick(30)
 '''
-
+# КОНЕЦ НОВОГО КОДА
 # инициализация
 pg.init()
 scr = pg.display.set_mode((640, 360))
@@ -415,7 +467,9 @@ gamedb['Warrior'] = ''
 gamedb['Mexicanes'] = ''
 gamedb['Shrek'] = ''
 gamedb['SkinCount'] = '1'
+gamedb['logged_in'] = '1' # NEW CODE
 '''
+
 money = int(gamedb['Money'])
 if gamedb['Loki'] == '1':
     skins_onacc.append(LOKI_SKIN)
@@ -474,3 +528,6 @@ while running:
         shop_screen()
     elif scrnow == GAMEOVERSCR:
         game_over_screen()
+    # NEW
+    elif scrnow == ACCSCR:
+        accounts_screen()
