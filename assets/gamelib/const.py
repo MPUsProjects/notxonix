@@ -16,7 +16,9 @@ STATUS = 2
 LDBFILE = 'data/playerdata.db'
 
 # технические (для CloudDB) (НОВЫЕ 3 СТРОКИ)
-CDB_URL = '127.0.0.1/api'
+CDB_MAIN_URL = 'localhost:5000'
+CDB_URL = f'{CDB_MAIN_URL}/api/notxonix'
+CDB_LOGINAPI_URL = f'{CDB_MAIN_URL}/loginapi'
 CDB_API_KEY = 'very secret key yay'
 CDB_GAME_ID = 'notxonix'
 

@@ -270,46 +270,65 @@ class LocalDB:
         self.connectobj.close()
 
 
+# НАЧАЛО НОВОГО КОДА
+# Объект связки облачной базы данных с локальной, а также
+# позволяющий войти в аккаунт
 class CloudDB:
-    def __init__(self, api_address: str, api_key: str, localdb: LocalDB = None):
+    def __init__(self, api_address: str, loginapi_address: str, check_address: str, api_key: str, localdb: LocalDB,
+                 gamedb: dict):
         self.api_address = api_address
+        self.api_login_address = loginapi_address
+        self.check_address = check_address
         self.api_key = api_key
-        self.ldb = ldb
+        self.ldb = localdb
+        self.gamedb = gamedb
+
+    def check_connection(self):
+        return reqget(self.check_address).ok
 
     def get(self):
-        if reqget(self.api_address).ok:
-            cdb_username = 'USERNAME'  # ВСТАВИТЬ СЮДА ИМЯ ПОЛЬЗОВАТЕЛЯ ИЗ LDB
-            json_request = {'api_key': self.api_key,
-                            'game_id': CDB_GAME_ID,
-                            'username': cdb_username}
+        if self.check_connection():
+            json_request = {'username': self.gamedb['username'],
+                            'pwdhash': self.gamedb['pwdhash']}
             try:
-                res = reqget(self.api_address, json=json_request).json()
-                return res
+                res = reqget(self.api_address, json=json_request)
+                if res.status_code == 403:
+                    return None
+                else:
+                    return res.json()
             except RequestException:
                 return None
         else:
             return None
 
-    def save(self, data):
-        if reqget(self.api_address).ok:
-            cdb_username = 'USERNAME'  # ВСТАВИТЬ СЮДА ИМЯ ПОЛЬЗОВАТЕЛЯ ИЗ LDB
-            json_request = {'api_key': self.api_key,
-                            'game_id': CDB_GAME_ID,
-                            'username': cdb_username,
-                            'data': data}
-            reqpost(self.api_address, json=json_request)
+    def save(self, data: dict):
+        if self.check_connection():
+            dat = data.copy()
+            del dat['username']
+            del dat['pwdhash']
+            json_request = {'username': self.gamedb['username'],
+                            'pwdhash': self.gamedb['pwdhash'],
+                            'data': dat}
+            res = reqpost(self.api_address, json=json_request)
+            if res.status_code == 403:
+                return False
             return True
         else:
             print('something went wrong')
             return False
 
     def get_to_ldb(self):
-        if self.ldb is not None:
-            pass
+        res = self.get()
+        if res is not None:
+            self.ldb.save(res)
+            self.gamedb = self.ldb.get_all()
+            return True
+        else:
+            return False
 
     def save_from_ldb(self):
-        if self.ldb is not None:
-            pass
+        return self.save(self.gamedb)
+# КОНЕЦ НОВОГО КОДА
 
 
 """
