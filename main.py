@@ -44,7 +44,8 @@ def loading_screen():
     """Возможно, обтянутый кожей живой человек и не машина никогда его не увидит - слишком мало время загрузки"""
 
     # Загружаем спрайты, звуки и прочее, чтобы во время игры был минимум файловой работы
-    global scr, FIELDTEXTURES, WALLTEXTURES, BALLTEXTURES, PLAYERTEXTURES, BGTEXTURES, DECOTEXTURES
+    global scr, FIELDTEXTURES, WALLTEXTURES, BALLTEXTURES, PLAYERTEXTURES, BGTEXTURES, DECOTEXTURES, ldb, gamedb, cdb, \
+        skins_onacc, money
 
     # Сделаем пользователю картинку загрузки, чтобы не беспокоился
     scr.blit(pg.image.load('assets/textures/background/loading_screen1.png'), (0, 0))
@@ -67,6 +68,44 @@ def loading_screen():
         for j in range(0, ysize, 40):
             gamebg.blit(WALLTEXTURES['wall1'], (i, j))
     BGTEXTURES['gamebg'] = gamebg
+
+    ldb = LocalDB(LDBFILE)
+    gamedb = ldb.get_all()
+    cdb = CloudDB(CDB_URL, CDB_LOGINAPI_URL, CDB_MAIN_URL, ldb, gamedb)
+
+    money = int(gamedb['Money'])
+    if gamedb['Loki'] == '1':
+        skins_onacc.append(LOKI_SKIN)
+    elif gamedb['Warrior'] == '1':
+        skins_onacc.append(WARRIOR_SKIN)
+    elif gamedb['Mexicanes'] == '1':
+        skins_onacc.append(MEXICAN_SKIN)
+    elif gamedb['Shrek'] == '1':
+        skins_onacc.append(SHREK_SKIN)
+    if gamedb['Loki'] == '2':
+        skins_onacc.append(LOKI_SKIN)
+    elif gamedb['Warrior'] == '2':
+        skins_onacc.append(WARRIOR_SKIN)
+    elif gamedb['Mexicanes'] == '2':
+        skins_onacc.append(MEXICAN_SKIN)
+    elif gamedb['Shrek'] == '2':
+        skins_onacc.append(SHREK_SKIN)
+    if gamedb['Loki'] == '3':
+        skins_onacc.append(LOKI_SKIN)
+    elif gamedb['Warrior'] == '3':
+        skins_onacc.append(WARRIOR_SKIN)
+    elif gamedb['Mexicanes'] == '3':
+        skins_onacc.append(MEXICAN_SKIN)
+    elif gamedb['Shrek'] == '3':
+        skins_onacc.append(SHREK_SKIN)
+    if gamedb['Loki'] == '4':
+        skins_onacc.append(LOKI_SKIN)
+    elif gamedb['Warrior'] == '4':
+        skins_onacc.append(WARRIOR_SKIN)
+    elif gamedb['Mexicanes'] == '4':
+        skins_onacc.append(MEXICAN_SKIN)
+    elif gamedb['Shrek'] == '4':
+        skins_onacc.append(SHREK_SKIN)
 
 
 def main_screen():
@@ -376,24 +415,7 @@ def shop_screen():
 def accounts_screen():
     global clock, scr, running, scrnow
     while running and scrnow == ACCSCR:
-        events = pg.event.get()
-        for event in events:
-            if event.type == pg.QUIT:
-                shutdown()
-                break
-            if event.type == pg.KEYUP:
-                if event.key == pg.K_ESCAPE:
-                    scrnow = MAINSCR
-                    break
-            if event.type == pg.MOUSEBUTTONUP:
-                cor = event.pos
-                if cor[0] <= 60 and 20 <= cor[1] <= 40:
-                    scrnow = MAINSCR
-                    break
-                if 260 <= cor[0] <= 400 and 220 <= cor[1] <= 270:
-                    if gamedb['logged_in'] == '1':
-                        gamedb['logged_in'] = '0'
-                # Отображение фона
+        # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
         bg = BGTEXTURES['back']
         bg = pg.transform.rotozoom(bg, 0, 1.4)
@@ -414,6 +436,23 @@ def accounts_screen():
 
         # Ограничение FPS
         pg.time.Clock().tick(30)
+
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                shutdown()
+                break
+            if event.type == pg.KEYUP:
+                if event.key == pg.K_ESCAPE:
+                    scrnow = MAINSCR
+                    break
+            if event.type == pg.MOUSEBUTTONUP:
+                cor = event.pos
+                if cor[0] <= 60 and 20 <= cor[1] <= 40:
+                    scrnow = MAINSCR
+                    break
+                if 260 <= cor[0] <= 400 and 220 <= cor[1] <= 270:
+                    if gamedb['logged_in'] == '1':
+                        cdb.unlogin()
 
 
 ''' Окно подтверждения покупки, выйдет в 1.1(
@@ -449,8 +488,11 @@ scrnow = MAINSCR
 
 # настройка
 clock = pg.time.Clock()
-ldb = LocalDB(LDBFILE)
-gamedb = ldb.get_all()
+ldb = None
+gamedb = None
+cdb = None
+
+money = None
 
 ballamount = 0
 
@@ -469,40 +511,6 @@ gamedb['Shrek'] = ''
 gamedb['SkinCount'] = '1'
 gamedb['logged_in'] = '1' # NEW CODE
 '''
-
-money = int(gamedb['Money'])
-if gamedb['Loki'] == '1':
-    skins_onacc.append(LOKI_SKIN)
-elif gamedb['Warrior'] == '1':
-    skins_onacc.append(WARRIOR_SKIN)
-elif gamedb['Mexicanes'] == '1':
-    skins_onacc.append(MEXICAN_SKIN)
-elif gamedb['Shrek'] == '1':
-    skins_onacc.append(SHREK_SKIN)
-if gamedb['Loki'] == '2':
-    skins_onacc.append(LOKI_SKIN)
-elif gamedb['Warrior'] == '2':
-    skins_onacc.append(WARRIOR_SKIN)
-elif gamedb['Mexicanes'] == '2':
-    skins_onacc.append(MEXICAN_SKIN)
-elif gamedb['Shrek'] == '2':
-    skins_onacc.append(SHREK_SKIN)
-if gamedb['Loki'] == '3':
-    skins_onacc.append(LOKI_SKIN)
-elif gamedb['Warrior'] == '3':
-    skins_onacc.append(WARRIOR_SKIN)
-elif gamedb['Mexicanes'] == '3':
-    skins_onacc.append(MEXICAN_SKIN)
-elif gamedb['Shrek'] == '3':
-    skins_onacc.append(SHREK_SKIN)
-if gamedb['Loki'] == '4':
-    skins_onacc.append(LOKI_SKIN)
-elif gamedb['Warrior'] == '4':
-    skins_onacc.append(WARRIOR_SKIN)
-elif gamedb['Mexicanes'] == '4':
-    skins_onacc.append(MEXICAN_SKIN)
-elif gamedb['Shrek'] == '4':
-    skins_onacc.append(SHREK_SKIN)
 # игровой цикл
 loading_screen()  # загрузим ресурсы игры
 

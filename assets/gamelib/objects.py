@@ -4,6 +4,7 @@ import assets.gamelib.const
 from sqlite3 import connect as sqlconnect
 from assets.gamelib.const import *
 from requests import get as reqget, post as reqpost, RequestException
+from werkzeug.security import generate_password_hash
 
 
 CELLVOID = 1  # поле шарика
@@ -266,6 +267,15 @@ class LocalDB:
                 self.db.execute(f"""INSERT INTO datatable(key, value) VALUES('{key}', '{value}')""")
         self.connectobj.commit()  # коммитим изменения в бд, чтобы они вступили в силу
 
+    # НАЧАЛО НОВОГО КОДА
+    def saveone(self, key: str, value: str):
+        if len(self.db.execute(f"""SELECT key FROM datatable WHERE key = '{key}'""").fetchall()) > 0:
+            self.db.execute(f"""UPDATE datatable SET value = '{value}' WHERE key = '{key}'""")
+        else:
+            self.db.execute(f"""INSERT INTO datatable(key, value) VALUES('{key}', '{value}')""")
+        self.connectobj.commit()
+    # КОНЕЦ НОВОГО КОДА
+
     def close(self):
         self.connectobj.close()
 
@@ -274,12 +284,10 @@ class LocalDB:
 # Объект связки облачной базы данных с локальной, а также
 # позволяющий войти в аккаунт
 class CloudDB:
-    def __init__(self, api_address: str, loginapi_address: str, check_address: str, api_key: str, localdb: LocalDB,
-                 gamedb: dict):
+    def __init__(self, api_address: str, loginapi_address: str, check_address: str, localdb: LocalDB, gamedb: dict):
         self.api_address = api_address
         self.api_login_address = loginapi_address
         self.check_address = check_address
-        self.api_key = api_key
         self.ldb = localdb
         self.gamedb = gamedb
 
@@ -328,6 +336,30 @@ class CloudDB:
 
     def save_from_ldb(self):
         return self.save(self.gamedb)
+
+    def login(self, username, password):
+        if self.check_connection():
+            pwdhash = generate_password_hash(password)
+            if reqget(self.api_login_address, json={'username': username,
+                                                    'pwdhash': pwdhash}).json():
+                self.ldb.saveone('username', username)
+                self.ldb.saveone('pwdhash', pwdhash)
+                self.ldb.saveone('logged_in', '1')
+                self.gamedb = self.ldb.get_all()
+                return True
+            else:
+                return False
+        else:
+            print('something went wrong')
+            return False
+
+    # Единственная функция CloudDB без веб-запросов - выход из аккаунта
+    # (локальная база данных "забывает" об аккаунте)
+    def unlogin(self):
+        self.ldb.saveone('username', '')
+        self.ldb.saveone('pwdhash', '')
+        self.ldb.saveone('logged_in', '0')
+        self.gamedb = self.ldb.get_all()
 # КОНЕЦ НОВОГО КОДА
 
 
