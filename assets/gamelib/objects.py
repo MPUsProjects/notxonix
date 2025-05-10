@@ -3,8 +3,10 @@ import pygame as pg
 import assets.gamelib.const
 from sqlite3 import connect as sqlconnect
 from assets.gamelib.const import *
-from requests import get as reqget, post as reqpost, RequestException
+from requests import get as reqget, post as reqpost
+from requests.exceptions import InvalidSchema, RequestException
 from werkzeug.security import generate_password_hash
+from json import dumps as to_json
 
 
 CELLVOID = 1  # поле шарика
@@ -218,32 +220,26 @@ class Ball(pg.sprite.Sprite):
 
 
 # "Визуальные" классы
-class Button(pg.sprite.Sprite):
-    def __init__(self, text: str, center: tuple[int, int], size: tuple[int, int], *group):
-        super().__init__(*group)
-        self.text = text
+# НАЧАЛО НОВОГО КОДА
+class Button:
+    def __init__(self, screen: pg.Surface, text: pg.Surface, surface: pg.Surface, center: tuple[int, int]):
         self.center = center
-        self.size = size
-        self.surface = pg.Surface(size)
-        self.rect = pg.Rect((0, 0), (0, 0))
-        self.rect.x = int(center[0] - size[0] / 2)
-        self.rect.y = int(center[1] - size[1] / 2)
-
-
-    def render(self):
-        pass
+        self.surface = surface
+        self.scr = screen
+        self.size = self.surface.get_size()
+        self.text = text
 
     def update(self):
-        pass
+        self.scr.blit(self.surface, self.surface.get_rect(center=self.center))
+        self.scr.blit(self.text, self.text.get_rect(center=self.center))
 
     def check_click(self, coords: tuple[int, int]):
         w, h = self.size
         x, y = self.center
         x1, y1 = coords
-        return True if x - w / 2 <= x1 <= x + w / 2 and y - h / 2 <= y1 <= y + h / 2 else False
+        return x - (w // 2) + 1 <= x1 <= x + (w // 2) and y - (h // 2) + 1 <= y1 <= y + (h // 2)
 
 
-# НАЧАЛО НОВОГО КОДА
 class TextInput:
     def __init__(self, screen: pg.Surface, coords: tuple[int, int], size: tuple[int, int], font: pg.font.Font,
                  inactive_color: pg.Color, active_color: pg.Color,  inactive_text: str, inactive_text_color: pg.Color,
@@ -373,7 +369,15 @@ class CloudDB:
         self.gamedb = gamedb
 
     def check_connection(self):
-        return reqget(self.check_address).ok
+        """try:
+            reqget(self.check_address).ok
+            return True
+        except InvalidSchema:
+            return False
+        except RequestException:
+            return False"""
+        reqget(self.check_address)
+        return True
 
     def get(self):
         if self.check_connection():
@@ -384,7 +388,8 @@ class CloudDB:
                 if res.status_code == 403:
                     return None
                 else:
-                    return res.json()
+                    print(res.json())
+                    # return res.json()
             except RequestException:
                 return None
         else:
@@ -395,10 +400,10 @@ class CloudDB:
             dat = data.copy()
             del dat['username']
             del dat['pwdhash']
-            json_request = {'username': self.gamedb['username'],
-                            'pwdhash': self.gamedb['pwdhash'],
-                            'data': dat}
-            res = reqpost(self.api_address, json=json_request)
+            json_request = {'username': to_json(self.gamedb['username']),
+                            'pwdhash': to_json(self.gamedb['pwdhash']),
+                            'data': to_json(dat)}
+            res = reqpost(self.api_address, params=json_request)
             if res.status_code == 403:
                 return False
             return True
@@ -421,12 +426,12 @@ class CloudDB:
     def login(self, username, password):
         if self.check_connection():
             pwdhash = generate_password_hash(password)
-            if reqget(self.api_login_address, json={'username': username,
-                                                    'pwdhash': pwdhash}).json():
-                self.ldb.saveone('username', username)
-                self.ldb.saveone('pwdhash', pwdhash)
-                self.ldb.saveone('logged_in', '1')
-                self.gamedb = self.ldb.get_all()
+            if reqget(self.api_login_address, json={'username': to_json(username),
+                                                      'pwdhash': to_json(pwdhash)}).json() == '1':
+                self.gamedb['username'] = username
+                self.gamedb['pwdhash'] = pwdhash
+                self.gamedb['logged_in'] = '1'
+                self.ldb.save(self.gamedb)
                 return True
             else:
                 return False
@@ -437,10 +442,10 @@ class CloudDB:
     # Единственная функция CloudDB без веб-запросов - выход из аккаунта
     # (локальная база данных "забывает" об аккаунте)
     def unlogin(self):
-        self.ldb.saveone('username', '')
-        self.ldb.saveone('pwdhash', '')
-        self.ldb.saveone('logged_in', '0')
-        self.gamedb = self.ldb.get_all()
+        self.gamedb['username'] = ''
+        self.gamedb['pwdhash'] = ''
+        self.gamedb['logged_in'] = '0'
+        self.ldb.save(self.gamedb)
 # КОНЕЦ НОВОГО КОДА
 
 

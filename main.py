@@ -413,7 +413,7 @@ def shop_screen():
 
 # НАЧАЛО НОВОГО КОДА
 def accounts_screen():
-    global clock, scr, running, scrnow
+    global clock, scr, running, scrnow, gamedb, cdb
 
     inputs_symb = '1234567890-_qwertyuiopasdfghjklzxcvbnm'
     usernameinp = TextInput(
@@ -434,6 +434,11 @@ def accounts_screen():
     pwdinp.inactive_text = 'Password'
     pwdinp.hidden = True
 
+    loadbtn = Button(scr, LOAD, BETTERBTN, (320, 125))
+    savebtn = Button(scr, SAVE, BETTERBTN, (320, 185))
+    leavebtn = Button(scr, LEAVE, BETTERBTN, (320, 245))
+    loginbtn = Button(scr, LOGINTEXT, BETTERBTN, (320, 230))
+
     while running and scrnow == ACCSCR:
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
@@ -443,15 +448,15 @@ def accounts_screen():
         scr.blit(BACK, (0, 0))
         scr.blit(BF, (60, 21))
         if gamedb['logged_in'] == '1':
-            scr.blit(BTN, (200, 0))
-            scr.blit(BTN, (200, 60))
-            scr.blit(BTN, (200, 120))
-            scr.blit(LOAD, (254, 110))
-            scr.blit(SAVE, (250, 170))
-            scr.blit(LEAVE, (280, 230))
+            loadbtn.update()
+            savebtn.update()
+            leavebtn.update()
+
         elif gamedb['logged_in'] == '0':
             usernameinp.update()
             pwdinp.update()
+            loginbtn.update()
+
        # Обновление дисплея
         pg.display.flip()
 
@@ -468,7 +473,11 @@ def accounts_screen():
                     if cor[0] <= 60 and 20 <= cor[1] <= 40:
                         scrnow = MAINSCR
                         break
-                    elif 260 <= cor[0] <= 400 and 220 <= cor[1] <= 270:
+                    elif loadbtn.check_click(cor):
+                        cdb.get_to_ldb()
+                    elif savebtn.check_click(cor):
+                        cdb.save_from_ldb()
+                    elif leavebtn.check_click(cor):
                         cdb.unlogin()
 
             elif gamedb['logged_in'] == '0':
@@ -479,6 +488,8 @@ def accounts_screen():
                     if cor[0] <= 60 and 20 <= cor[1] <= 40:
                         scrnow = MAINSCR
                         break
+                    elif loginbtn.check_click(cor):
+                        cdb.login(usernameinp.text, pwdinp.text)
                 if event.type == pg.KEYUP:
                     key = event.key
                     if key == pg.K_ESCAPE:
@@ -533,7 +544,11 @@ clock = pg.time.Clock()
 ldb = None
 gamedb = None
 cdb = None
-
+"""
+ldb = LocalDB(LDBFILE)
+gamedb = ldb.get_all()
+cdb = CloudDB(CDB_URL, CDB_LOGINAPI_URL, CDB_MAIN_URL, ldb, gamedb)
+"""
 money = None
 
 ballamount = 0

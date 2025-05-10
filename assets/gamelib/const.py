@@ -16,7 +16,7 @@ STATUS = 2
 LDBFILE = 'data/playerdata.db'
 
 # технические (для CloudDB) (НОВЫЕ 3 СТРОКИ)
-CDB_MAIN_URL = 'localhost:5000'
+CDB_MAIN_URL = 'http://localhost:5000'
 CDB_URL = f'{CDB_MAIN_URL}/api/notxonix'
 CDB_LOGINAPI_URL = f'{CDB_MAIN_URL}/loginapi'
 CDB_API_KEY = 'very secret key yay'
@@ -36,6 +36,7 @@ BGTEX = load_bg_textures()
 # deco
 ARR = MISC['arrow']
 BTN = pg.transform.rotozoom(MISC['button'], 0, 5)
+BETTERBTN = pg.transform.rotozoom(MISC['betterbutton'], 0, 5)
 MONEY = MISC['cash']
 ARR2 = pg.transform.rotozoom(ARR, 180, 1)
 BACK = pg.transform.rotozoom(ARR, 180, 1.5)
@@ -60,6 +61,7 @@ LOSTEX = TITLE.render("ПОРАЖЕНИЕ!", True, (255, 255, 255))
 AC = TITLE.render("@", True, (255, 255, 255))
 LOAD = FONT.render("ЗАГРУЗИТЬ", True, (255, 255, 255))
 SAVE = FONT.render("СОХРАНИТЬ", True, (255, 255, 255))
+LOGINTEXT = FONT.render("ВОЙТИ", True, (255, 255, 255))
 SET = FONT.render("НАСТРОЙКИ", True, (255, 255, 255))
 # КОНЕЦ
 
