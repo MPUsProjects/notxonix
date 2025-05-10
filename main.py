@@ -495,17 +495,6 @@ def accounts_screen():
                         key = event.unicode
                         usernameinp.add_symbol(key)
                         pwdinp.add_symbol(key)
-            if event.type == pg.MOUSEBUTTONUP:
-                cor = event.pos
-                if cor[0] <= 60 and 20 <= cor[1] <= 40:
-                    scrnow = MAINSCR
-                    break
-                if gamedb['logged_in'] == '1':
-                    if 260 <= cor[0] <= 400 and 220 <= cor[1] <= 270:
-                        cdb.unlogin()
-                elif gamedb['logged_in'] == '0':
-                    usernameinp.check_click(cor)
-                    pwdinp.check_click(cor)
 
 
 ''' Окно подтверждения покупки, выйдет в 1.1(
