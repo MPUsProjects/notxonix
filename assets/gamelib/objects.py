@@ -388,8 +388,7 @@ class CloudDB:
                 if res.status_code == 403:
                     return None
                 else:
-                    print(res.json())
-                    # return res.json()
+                    return res.json()
             except RequestException:
                 return None
         else:
@@ -400,10 +399,11 @@ class CloudDB:
             dat = data.copy()
             del dat['username']
             del dat['pwdhash']
-            json_request = {'username': to_json(self.gamedb['username']),
-                            'pwdhash': to_json(self.gamedb['pwdhash']),
-                            'data': to_json(dat)}
-            res = reqpost(self.api_address, params=json_request)
+            del dat['logged_in']
+            json_request = {'username': self.gamedb['username'],
+                            'pwdhash': self.gamedb['pwdhash'],
+                            'data': dat}
+            res = reqpost(self.api_address, json=json_request)
             if res.status_code == 403:
                 return False
             return True
@@ -425,9 +425,12 @@ class CloudDB:
 
     def login(self, username, password):
         if self.check_connection():
-            pwdhash = generate_password_hash(password)
-            if reqget(self.api_login_address, json={'username': to_json(username),
-                                                      'pwdhash': to_json(pwdhash)}).json() == '1':
+            pwdhash = password
+            reqres = reqget(self.api_login_address, json={
+                'username': username,
+                'pwdhash': pwdhash
+            }).json()
+            if reqres == '1':
                 self.gamedb['username'] = username
                 self.gamedb['pwdhash'] = pwdhash
                 self.gamedb['logged_in'] = '1'
