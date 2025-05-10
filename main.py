@@ -414,6 +414,26 @@ def shop_screen():
 # НАЧАЛО НОВОГО КОДА
 def accounts_screen():
     global clock, scr, running, scrnow
+
+    inputs_symb = '1234567890-_qwertyuiopasdfghjklzxcvbnm'
+    usernameinp = TextInput(
+        scr,
+        (320, 130),
+        (250, 40),
+        FONT,
+        pg.Color('#e5e5e5'),
+        pg.Color('#ffffff'),
+        'Username',
+        pg.Color('#818181'),
+        pg.Color('#000000'),
+        inputs_symb,
+        16
+    )
+    pwdinp = usernameinp.copy()
+    pwdinp.coords = (320, 180)
+    pwdinp.inactive_text = 'Password'
+    pwdinp.hidden = True
+
     while running and scrnow == ACCSCR:
         # Отображение фона
         scr.fill((255, 255, 255))  # Белый фон
@@ -430,7 +450,8 @@ def accounts_screen():
             scr.blit(SAVE, (250, 170))
             scr.blit(LEAVE, (280, 230))
         elif gamedb['logged_in'] == '0':
-            pass
+            usernameinp.update()
+            pwdinp.update()
        # Обновление дисплея
         pg.display.flip()
 
@@ -441,18 +462,50 @@ def accounts_screen():
             if event.type == pg.QUIT:
                 shutdown()
                 break
-            if event.type == pg.KEYUP:
-                if event.key == pg.K_ESCAPE:
-                    scrnow = MAINSCR
-                    break
+            if gamedb['logged_in'] == '1':
+                if event.type == pg.MOUSEBUTTONUP:
+                    cor = event.pos
+                    if cor[0] <= 60 and 20 <= cor[1] <= 40:
+                        scrnow = MAINSCR
+                        break
+                    elif 260 <= cor[0] <= 400 and 220 <= cor[1] <= 270:
+                        cdb.unlogin()
+
+            elif gamedb['logged_in'] == '0':
+                if event.type == pg.MOUSEBUTTONUP:
+                    cor = event.pos
+                    usernameinp.check_click(cor)
+                    pwdinp.check_click(cor)
+                    if cor[0] <= 60 and 20 <= cor[1] <= 40:
+                        scrnow = MAINSCR
+                        break
+                if event.type == pg.KEYUP:
+                    key = event.key
+                    if key == pg.K_ESCAPE:
+                        if usernameinp.active or pwdinp.active:
+                            usernameinp.deactivate()
+                            pwdinp.deactivate()
+                        else:
+                            scrnow = MAINSCR
+                            break
+                    elif key == pg.K_BACKSPACE:
+                        usernameinp.backspace()
+                        pwdinp.backspace()
+                    else:
+                        key = event.unicode
+                        usernameinp.add_symbol(key)
+                        pwdinp.add_symbol(key)
             if event.type == pg.MOUSEBUTTONUP:
                 cor = event.pos
                 if cor[0] <= 60 and 20 <= cor[1] <= 40:
                     scrnow = MAINSCR
                     break
-                if 260 <= cor[0] <= 400 and 220 <= cor[1] <= 270:
-                    if gamedb['logged_in'] == '1':
+                if gamedb['logged_in'] == '1':
+                    if 260 <= cor[0] <= 400 and 220 <= cor[1] <= 270:
                         cdb.unlogin()
+                elif gamedb['logged_in'] == '0':
+                    usernameinp.check_click(cor)
+                    pwdinp.check_click(cor)
 
 
 ''' Окно подтверждения покупки, выйдет в 1.1(

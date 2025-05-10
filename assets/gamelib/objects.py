@@ -243,6 +243,87 @@ class Button(pg.sprite.Sprite):
         return True if x - w / 2 <= x1 <= x + w / 2 and y - h / 2 <= y1 <= y + h / 2 else False
 
 
+# НАЧАЛО НОВОГО КОДА
+class TextInput:
+    def __init__(self, screen: pg.Surface, coords: tuple[int, int], size: tuple[int, int], font: pg.font.Font,
+                 inactive_color: pg.Color, active_color: pg.Color,  inactive_text: str, inactive_text_color: pg.Color,
+                 text_color: pg.Color, allowed_symbols: str = None, max_symbols: int = -1, hidden: bool = False):
+        self.scr = screen
+        self.coords = coords
+        self.size = size
+        self.font = font
+        self.inactive_color = inactive_color
+        self.active_color = active_color
+        self.inactive_text = inactive_text
+        self.text = ''
+        self.inactive_text_color = inactive_text_color
+        self.text_color = text_color
+        self.allowed_symb = allowed_symbols
+        self.maxlen = max_symbols
+        self.hidden = hidden
+
+        self.active = False
+
+    def update(self):
+        surf = pg.Surface(self.size)
+        surf.fill((0, 0, 0))
+        inpsurf = pg.Surface((self.size[0] - 2, self.size[1] - 2))
+        if self.active:
+            inpsurf.fill(self.active_color)
+        else:
+            inpsurf.fill(self.inactive_color)
+        surf.blit(inpsurf, (1, 1))
+        if self.text:
+            if self.hidden:
+                text = self.font.render('*' * len(self.text), False, self.text_color)
+            else:
+                text = self.font.render(self.text, False, self.text_color)
+        else:
+            text = self.font.render(self.inactive_text, False, self.inactive_text_color)
+        surf.blit(text, (2, 2))
+        self.scr.blit(surf, surf.get_rect(center=self.coords))
+
+    def check_click(self, mousecoords):
+        mx, my = mousecoords
+        sx, sy = self.size
+        x, y = self.coords
+        if x - (sx // 2) + 1 <= mx <= x + (sx // 2) and y - (sy // 2) + 1 <= my <= y + (sy // 2):
+            self.active = True
+            return True
+        else:
+            self.active = False
+            return False
+
+    def backspace(self):
+        if self.active and self.text:
+            self.text = self.text[:-1]
+
+    def add_symbol(self, symbol: str):
+        if self.active:
+            checker = True
+            if self.allowed_symb is not None:
+                checker = checker and symbol.lower() in self.allowed_symb
+            if self.maxlen >= 0:
+                checker = checker and len(self.text) <= self.maxlen - 1
+
+            if checker:
+                self.text += symbol
+
+    def activate(self):
+        self.active = True
+
+    def deactivate(self):
+        self.active = False
+
+    def clear(self):
+        self.text = ''
+
+    def copy(self):
+        return TextInput(self.scr, self.coords, self.size, self.font, self.inactive_color, self.active_color,
+                         self.inactive_text, self.inactive_text_color, self.text_color, self.allowed_symb, self.maxlen)
+# КОНЕЦ НОВОГО КОДА
+
+
 # Исполнительные классы
 class LocalDB:
     def __init__(self, dbfile):
