@@ -11,7 +11,7 @@ SHOPSCR = 3
 SKINSCR = 4
 BUYSCR = 5
 GAMEOVERSCR = 6
-ACCSCR = 7 # новая строка
+ACCSCR = 7  # новая строка
 STATUS = 2
 LDBFILE = 'data/playerdata.db'
 
@@ -48,8 +48,8 @@ BF = FONT.render("назад", True, (255, 255, 255))  # BF = Back Font
 MF = FONT.render("магазин", True, (255, 255, 255))  # MF = Magazin Font
 MT = TITLE.render("МАГАЗИН", True, (255, 255, 255))  # MT = Magazin Title
 ST = TITLE.render("ВЫБЕРИТЕ СКИН", True, (255, 255, 255))  # ST = Skinchanger Title
-'YES = TITLE.render("ДА", True, (255, 255, 255))'
-'NO = TITLE.render("НЕТ", True, (255, 255, 255))'
+YES = TITLE.render("ДА", True, (255, 255, 255))
+NO = TITLE.render("НЕТ", True, (255, 255, 255))
 MON = pg.transform.rotozoom(MONEY, 0, 1.2)  # money resized
 GAME = FONT.render("ИГРАТЬ", True, (255, 255, 255))
 LEAVE = FONT.render("ВЫЙТИ", True, (255, 255, 255))
@@ -86,6 +86,13 @@ WARRIOR_SKIN = 'warrior.png'
 MEXICAN_SKIN = 'mexicanes.png'
 SHREK_SKIN = 'shrek.png'
 CURRENT_SKIN = '0'
+
+# cost
+AMOUNTN = TITLE.render(str(NORMAL), True, (255, 255, 255))
+AMOUNTR = TITLE.render(str(RARE), True, (0, 255, 0))
+AMOUNTE = TITLE.render(str(EPIC), True, (150, 0, 230))
+AMOUNTL = TITLE.render(str(LEGENDARY), True, (255, 255, 0))
+AMOUNT = FONT.render("ЦЕНА:", True, (255, 255, 255))
 
 # cellcodes
 __CELLPLAYER = '@'

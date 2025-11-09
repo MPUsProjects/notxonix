@@ -159,7 +159,7 @@ def main_screen():
                     break
                 elif 255 < x < 390 and 160 < y < 210:
                     scrnow = SKINSCR
-                elif 0 < x < 50 and 300 < y < 340: # НОВЫЕ 3 СТРОКИ
+                elif 0 < x < 50 and 300 < y < 340:  # НОВЫЕ 3 СТРОКИ
                     scrnow = ACCSCR
                     break
                 elif 255 < x < 390 and 220 < y < 270:
@@ -393,12 +393,20 @@ def shop_screen():
         scr.blit(bg, (0, 0))
         if gamedb['LB'] == '0':
             scr.blit(skins_pic1[1], (20, 50))
+            scr.blit(AMOUNT, (122, 185))
+            scr.blit(AMOUNTL, (140, 200))
         if gamedb['WB'] == '0':
             scr.blit(skins_pic1[2], (300, 50))
+            scr.blit(AMOUNT, (422, 185))
+            scr.blit(AMOUNTN, (450, 200))
         if gamedb['LB'] == '1' and gamedb['MexB'] == '0':
             scr.blit(skins_pic1[3], (20, 50))
+            scr.blit(AMOUNT, (122, 185))
+            scr.blit(AMOUNTE, (140, 200))
         if gamedb['WB'] == '1' and gamedb['ShrekB'] == '0':
             scr.blit(skins_pic1[4], (300, 50))
+            scr.blit(AMOUNT, (412, 185))
+            scr.blit(AMOUNTR, (420, 200))
         scr.blit(BACK, (0, 0))
         scr.blit(BF, (60, 21))
         scr.blit(MT, (210, 21))
@@ -508,7 +516,6 @@ def accounts_screen():
                         pwdinp.add_symbol(key)
 
 
-''' Окно подтверждения покупки, выйдет в 1.1(
 def buy_screen():
     global clock, scr
     while running and scrnow == SHOPSCR:
@@ -520,18 +527,18 @@ def buy_screen():
                 else:
                     return False
         # Отображение фона
-        scr1.fill((255, 255, 255))  # Белый фон
+        scr.fill((255, 255, 255))  # Белый фон
         bg = pg.image.load('assets/textures/background/back.png')
         bg = pg.transform.rotozoom(bg, 0, 1.4)
-        scr1.blit(bg, (0, 0))
-        scr1.blit(YES, (0, 0))
-        scr1.blit(NO, (50, 0))
+        scr.blit(bg, (0, 0))
+        scr.blit(YES, (0, 0))
+        scr.blit(NO, (50, 0))
         # Обновление дисплея
         pg.display.flip()
         # Ограничение FPS
         pg.time.Clock().tick(30)
-'''
-# КОНЕЦ НОВОГО КОДА
+
+# КОНЕЦ НОВОГО КОДА, 65 строк
 # инициализация
 pg.init()
 scr = pg.display.set_mode((640, 360))
@@ -566,8 +573,8 @@ gamedb['Warrior'] = ''
 gamedb['Mexicanes'] = ''
 gamedb['Shrek'] = ''
 gamedb['SkinCount'] = '1'
-gamedb['logged_in'] = '1' # NEW CODE
-'''
+gamedb['logged_in'] = '1' '''
+# NEW CODE
 # игровой цикл
 loading_screen()  # загрузим ресурсы игры
 

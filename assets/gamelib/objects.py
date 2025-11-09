@@ -211,7 +211,7 @@ class Ball(pg.sprite.Sprite):
             self.rect.x += self.vx
             self.rect.y += self.vy
 
-        bcoords = self.board.on_board_coords((self.rect.x + 20, self.rect.y + 20))
+        bcoords = self.board.on_board_coords((self.rect.x, self.rect.y))
         '''if self.board.board[bcoords[0]][bcoords[1]].is_player():
             standart_death_func()'''
 
@@ -479,15 +479,16 @@ class CloudDB:
 
 
 def skin_check(num):
-    if gamedb['Skin'] == gamedb['Loki']:
-        return 'loki'
-    elif gamedb['Skin'] == gamedb['Warrior']:
-        return 'warrior'
-    elif gamedb['Skin'] == gamedb['Main']:
+    num = str(num)
+    if num == gamedb['Main']:
         return 'main_hero'
-    elif gamedb['Skin'] == gamedb['Mexicanes']:
+    elif num == gamedb['Warrior']:
+        return 'warrior'
+    elif num == gamedb['Loki']:
+        return 'loki'
+    elif num == gamedb['Mexicanes']:
         return 'mexicanes'
-    elif gamedb['Skin'] == gamedb['Shrek']:
+    elif num == gamedb['Shrek']:
         return 'shrek'
 
 
