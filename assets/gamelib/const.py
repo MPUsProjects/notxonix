@@ -70,6 +70,7 @@ FREE = 0
 NORMAL = 5
 RARE = 10
 EPIC = 20
+MYTHIC = 35
 LEGENDARY = 50
 
 # rarities
@@ -78,6 +79,7 @@ LOKI = LEGENDARY
 WARRIOR = NORMAL
 MEXICANES = EPIC
 SHREK = RARE
+STEVE = MYTHIC
 
 # skins
 LOKI_SKIN = 'loki.png'
@@ -85,12 +87,14 @@ MINER_SKIN = 'main_hero.png'
 WARRIOR_SKIN = 'warrior.png'
 MEXICAN_SKIN = 'mexicanes.png'
 SHREK_SKIN = 'shrek.png'
+STEVE_SKIN = 'steve.png'
 CURRENT_SKIN = '0'
 
 # cost
 AMOUNTN = TITLE.render(str(NORMAL), True, (255, 255, 255))
 AMOUNTR = TITLE.render(str(RARE), True, (0, 255, 0))
 AMOUNTE = TITLE.render(str(EPIC), True, (150, 0, 230))
+AMOUNTM = TITLE.render(str(MYTHIC), True, (255, 0, 0))
 AMOUNTL = TITLE.render(str(LEGENDARY), True, (255, 255, 0))
 AMOUNT = FONT.render("ЦЕНА:", True, (255, 255, 255))
 

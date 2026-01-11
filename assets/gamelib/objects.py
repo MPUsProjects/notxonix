@@ -490,6 +490,8 @@ def skin_check(num):
         return 'mexicanes'
     elif num == gamedb['Shrek']:
         return 'shrek'
+    elif num == gamedb['Steve']:
+        return 'steve'
 
 
 ldb = LocalDB(LDBFILE)

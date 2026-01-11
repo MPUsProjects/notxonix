@@ -13,7 +13,7 @@ PLAYERTEXTURES = {}
 BGTEXTURES = {}
 DECOTEXTURES = {}
 
-skins_ingame = ['main_hero.png', 'loki.png', 'warrior.png', 'mexicanes.png', 'shrek.png']
+skins_ingame = ['main_hero.png', 'loki.png', 'warrior.png', 'mexicanes.png', 'shrek.png', 'steve.png']
 # скины которые впринципе есть в игре
 
 skins_onacc = ['main_hero.png']
@@ -82,6 +82,8 @@ def loading_screen():
         skins_onacc.append(MEXICAN_SKIN)
     elif gamedb['Shrek'] == '1':
         skins_onacc.append(SHREK_SKIN)
+    elif gamedb['Steve'] == '1':
+        skins_onacc.append(STEVE_SKIN)
     if gamedb['Loki'] == '2':
         skins_onacc.append(LOKI_SKIN)
     elif gamedb['Warrior'] == '2':
@@ -90,6 +92,8 @@ def loading_screen():
         skins_onacc.append(MEXICAN_SKIN)
     elif gamedb['Shrek'] == '2':
         skins_onacc.append(SHREK_SKIN)
+    elif gamedb['Steve'] == '2':
+        skins_onacc.append(STEVE_SKIN)
     if gamedb['Loki'] == '3':
         skins_onacc.append(LOKI_SKIN)
     elif gamedb['Warrior'] == '3':
@@ -98,6 +102,8 @@ def loading_screen():
         skins_onacc.append(MEXICAN_SKIN)
     elif gamedb['Shrek'] == '3':
         skins_onacc.append(SHREK_SKIN)
+    elif gamedb['Steve'] == '3':
+        skins_onacc.append(STEVE_SKIN)
     if gamedb['Loki'] == '4':
         skins_onacc.append(LOKI_SKIN)
     elif gamedb['Warrior'] == '4':
@@ -106,6 +112,18 @@ def loading_screen():
         skins_onacc.append(MEXICAN_SKIN)
     elif gamedb['Shrek'] == '4':
         skins_onacc.append(SHREK_SKIN)
+    elif gamedb['Steve'] == '4':
+        skins_onacc.append(STEVE_SKIN)
+    if gamedb['Loki'] == '5':
+        skins_onacc.append(LOKI_SKIN)
+    elif gamedb['Warrior'] == '5':
+        skins_onacc.append(WARRIOR_SKIN)
+    elif gamedb['Mexicanes'] == '5':
+        skins_onacc.append(MEXICAN_SKIN)
+    elif gamedb['Shrek'] == '5':
+        skins_onacc.append(SHREK_SKIN)
+    elif gamedb['Steve'] == '5':
+        skins_onacc.append(STEVE_SKIN)
 
 
 def main_screen():
